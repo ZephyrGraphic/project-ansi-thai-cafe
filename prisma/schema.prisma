@@ -1,0 +1,208 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ============ ENUMS ============
+
+enum UserRole {
+  ADMIN
+  KASIR
+  WAITER
+  KITCHEN
+}
+
+enum TableStatus {
+  AVAILABLE
+  OCCUPIED
+  RESERVED
+  CLEANING
+}
+
+enum OrderStatus {
+  PENDING
+  PREPARING
+  READY
+  SERVED
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CASH
+  QRIS
+}
+
+enum StockLogType {
+  IN
+  OUT
+}
+
+// ============ MODELS ============
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  role      UserRole @default(WAITER)
+  name      String?
+  email     String?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders Order[]
+
+  @@map("users")
+}
+
+model Table {
+  id        String      @id @default(cuid())
+  tableNo   Int         @unique
+  capacity  Int
+  status    TableStatus @default(AVAILABLE)
+  zone      String      @default("floor1")
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  orders Order[]
+
+  @@map("tables")
+}
+
+model Member {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String   @unique
+  points    Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders Order[]
+
+  @@map("members")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  isAvailable Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  menus Menu[]
+
+  @@map("categories")
+}
+
+model Menu {
+  id          String   @id @default(cuid())
+  name        String
+  price       Float
+  categoryId  String
+  description String?
+  image       String?
+  isAvailable Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category   Category      @relation(fields: [categoryId], references: [id])
+  orderItems OrderDetail[]
+  recipes    Recipe[]
+
+  @@map("menus")
+}
+
+model Ingredient {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  unit         String
+  currentStock Float    @default(0)
+  minStock     Float    @default(0)
+  costPerUnit  Float    @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  recipes   Recipe[]
+  stockLogs StockLog[]
+
+  @@map("ingredients")
+}
+
+model Recipe {
+  id           String @id @default(cuid())
+  menuId       String
+  ingredientId String
+  qtyNeeded    Float
+  unit         String
+
+  menu       Menu       @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@unique([menuId, ingredientId])
+  @@map("recipes")
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  tableId     String
+  userId      String?
+  memberId    String?
+  totalAmount Float       @default(0)
+  status      OrderStatus @default(PENDING)
+  notes       String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  table      Table         @relation(fields: [tableId], references: [id])
+  user       User?         @relation(fields: [userId], references: [id])
+  member     Member?       @relation(fields: [memberId], references: [id])
+  orderItems OrderDetail[]
+  payment    Payment?
+
+  @@map("orders")
+}
+
+model OrderDetail {
+  id       String  @id @default(cuid())
+  orderId  String
+  menuId   String
+  qty      Int
+  subtotal Float
+  notes    String?
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menu  Menu  @relation(fields: [menuId], references: [id])
+
+  @@map("order_details")
+}
+
+model Payment {
+  id        String        @id @default(cuid())
+  orderId   String        @unique
+  amount    Float
+  method    PaymentMethod @default(CASH)
+  createdAt DateTime      @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model StockLog {
+  id           String       @id @default(cuid())
+  ingredientId String
+  type         StockLogType
+  qty          Float
+  notes        String?
+  createdAt    DateTime     @default(now())
+
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@map("stock_logs")
+}
