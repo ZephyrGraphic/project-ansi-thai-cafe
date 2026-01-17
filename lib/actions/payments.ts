@@ -7,6 +7,7 @@ import type { PaymentMethod } from "@prisma/client";
 export async function processPayment(data: {
   orderId: string;
   method: PaymentMethod;
+  memberId?: string;
 }) {
   const order = await prisma.order.findUnique({
     where: { id: data.orderId },
@@ -24,10 +25,13 @@ export async function processPayment(data: {
     },
   });
 
-  // Update order status to COMPLETED
+  // Update order status to COMPLETED and link member if provided
   await prisma.order.update({
     where: { id: data.orderId },
-    data: { status: "COMPLETED" },
+    data: { 
+      status: "COMPLETED",
+      memberId: data.memberId || null,
+    },
   });
 
   // Update table status to CLEANING

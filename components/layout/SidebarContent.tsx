@@ -38,6 +38,9 @@ const adminNavItems: NavItem[] = [
   { title: "Inventaris", icon: "inventory_2", href: "/admin/inventory" },
   { title: "Resep (BOM)", icon: "cooking", href: "/admin/recipes" },
   { title: "Manajemen Menu", icon: "menu_book", href: "/admin/menu" },
+  { title: "Kategori Menu", icon: "category", href: "/admin/categories" },
+  { title: "Manajemen Meja", icon: "table_restaurant", href: "/admin/tables" },
+  { title: "Manajemen Member", icon: "card_membership", href: "/admin/members" },
   { title: "Akun Pengguna", icon: "manage_accounts", href: "/admin/users" },
 ];
 

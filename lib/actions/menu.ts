@@ -22,6 +22,21 @@ export async function updateCategory(id: string, data: { name?: string; isAvaila
   });
 }
 
+export async function deleteCategory(id: string) {
+  return await prisma.category.delete({
+    where: { id },
+  });
+}
+
+export async function getCategoriesWithMenuCount() {
+  return await prisma.category.findMany({
+    include: {
+      _count: { select: { menus: true } }
+    },
+    orderBy: { name: "asc" },
+  });
+}
+
 // ============ MENUS ============
 export async function getMenus() {
   return await prisma.menu.findMany({

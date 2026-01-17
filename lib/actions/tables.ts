@@ -47,6 +47,16 @@ export async function createTable(data: {
   return await prisma.table.create({ data });
 }
 
+export async function updateTable(
+  id: string,
+  data: Partial<{ tableNo: number; capacity: number; zone: string; status: TableStatus }>
+) {
+  return await prisma.table.update({
+    where: { id },
+    data,
+  });
+}
+
 export async function updateTableStatus(id: string, status: TableStatus) {
   return await prisma.table.update({
     where: { id },
