@@ -19,6 +19,18 @@ export interface SessionUser {
 // Login action
 export async function login(username: string, password: string): Promise<{ success: boolean; error?: string; user?: SessionUser }> {
   try {
+    // Debug Logging (Temporary)
+    const dbUrl = process.env.DATABASE_URL;
+    console.log("[DEBUG] Login attempt starting");
+    if (dbUrl) {
+      console.log(`[DEBUG] DATABASE_URL loaded. Length: ${dbUrl.length}`);
+      // Show protocol and host start to verify format, hide credentials
+      const maskedUrl = dbUrl.replace(/:[^:@]+@/, ":****@");
+      console.log(`[DEBUG] DATABASE_URL (masked): ${maskedUrl}`);
+    } else {
+      console.error("[DEBUG] CRITICAL: DATABASE_URL is undefined!");
+    }
+
     const user = await prisma.user.findFirst({
       where: { username, password },
     });
