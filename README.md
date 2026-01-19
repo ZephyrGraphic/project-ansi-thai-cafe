@@ -25,37 +25,41 @@ Proyek ini dikembangkan sebagai tugas mata kuliah **Analisis dan Perancangan Sis
 
 ## 👥 Tim Pengembang - Kelompok 2
 
-| No | Nama | NIM | Role |
-|:--:|------|-----|------|
-| 1 | **Ananda Putra Utama** | 20240050077 | 📋 Project Manager |
-| 2 | **Dipa Cahara Rakhman** | 20240050053 | 💻 Web Developer |
-| 3 | **M. Z. Haikal Hamdani** | 20240050147 | 🔍 System Analyst |
-| 4 | **Muhammad Dzakwan** | 20240050013 | 📝 Sekretaris |
-| 5 | **M. Ibnu Sina Fasya** | 20240050071 | 🎨 UI/UX Designer |
+| No  | Nama                     | NIM         | Role               | GitHub                                                                       |
+| :-: | ------------------------ | ----------- | ------------------ | ---------------------------------------------------------------------------- |
+|  1  | **Ananda Putra Utama**   | 20240050077 | 📋 Project Manager | [@Grooinon](https://github.com/Grooinon)                                     |
+|  2  | **Dipa Cahara Rakhman**  | 20240050053 | 💻 Web Developer   | [@Kaisen-7](https://github.com/Kaisen-7)                                     |
+|  3  | **M. Z. Haikal Hamdani** | 20240050147 | 🔍 System Analyst  | [@ZephyrGraphic](https://github.com/ZephyrGraphic)                           |
+|  4  | **Muhammad Dzakwan**     | 20240050013 | 📝 Sekretaris      | [@muhammaddzakwan434-creator](https://github.com/muhammaddzakwan434-creator) |
+|  5  | **M. Ibnu Sina Fasya**   | 20240050071 | 🎨 UI/UX Designer  | [@boristhespider8](https://github.com/boristhespider8)                       |
 
 ---
 
 ## ✨ Fitur Utama
 
 ### 🔐 Multi-Role Access
+
 - **Admin** - Manajemen menu, kategori, meja, member, inventori, dan laporan
 - **Kasir** - Proses pembayaran, ringkasan harian, dan riwayat transaksi
 - **Waiter** - Input pesanan dan monitoring status order
 - **Kitchen** - Display pesanan masuk dan update status memasak
 
 ### 📦 Manajemen Data
+
 - **Menu Management** - CRUD menu dengan kategori dan gambar
 - **Table Management** - Pengaturan meja dengan status dan zona
 - **Member System** - Program loyalitas dengan poin member
 - **Inventory Control** - Stok bahan baku dengan recipe/BOM
 
 ### 💳 Transaksi
+
 - Pembuatan pesanan dengan pemilihan meja
 - Multiple payment method (Cash & QRIS)
 - Real-time order tracking
 - Laporan penjualan harian
 
 ### 📊 Reporting
+
 - Dashboard ringkasan penjualan
 - Export laporan dalam format yang mudah dibaca
 - Statistik pendapatan dan menu terlaris
@@ -64,16 +68,16 @@ Proyek ini dikembangkan sebagai tugas mata kuliah **Analisis dan Perancangan Sis
 
 ## 🛠️ Tech Stack
 
-| Kategori | Teknologi |
-|----------|-----------|
-| **Framework** | Next.js 16.1 (App Router) |
-| **Language** | TypeScript |
-| **Styling** | Tailwind CSS 4.0 |
-| **Database** | PostgreSQL (Supabase) |
-| **ORM** | Prisma 5.22 |
-| **UI Components** | Radix UI |
-| **Icons** | Lucide React |
-| **Deployment** | Vercel |
+| Kategori          | Teknologi                 |
+| ----------------- | ------------------------- |
+| **Framework**     | Next.js 16.1 (App Router) |
+| **Language**      | TypeScript                |
+| **Styling**       | Tailwind CSS 4.0          |
+| **Database**      | PostgreSQL (Supabase)     |
+| **ORM**           | Prisma 5.22               |
+| **UI Components** | Radix UI                  |
+| **Icons**         | Lucide React              |
+| **Deployment**    | Vercel                    |
 
 ---
 
@@ -102,32 +106,37 @@ ansi-thai-cafe/
 ## 🚀 Cara Menjalankan Proyek
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - npm / yarn / pnpm
 - PostgreSQL database (atau gunakan Supabase)
 
 ### Instalasi
 
 1. **Clone repository**
+
    ```bash
    git clone https://github.com/ZephyrGraphic/project-ansi-thai-cafe.git
    cd ansi-thai-cafe
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Setup environment variables**
-   
+
    Buat file `.env` dan isi dengan konfigurasi berikut:
+
    ```env
    DATABASE_URL="postgresql://user:password@host:port/database?pgbouncer=true"
    DIRECT_URL="postgresql://user:password@host:port/database"
    ```
 
 4. **Setup database**
+
    ```bash
    # Generate Prisma Client
    npx prisma generate
@@ -140,27 +149,28 @@ ansi-thai-cafe/
    ```
 
 5. **Jalankan development server**
+
    ```bash
    npm run dev
    ```
 
 6. **Buka browser**
-   
+
    Akses [http://localhost:3000](http://localhost:3000)
 
 ---
 
 ## 📜 Available Scripts
 
-| Command | Deskripsi |
-|---------|-----------|
-| `npm run dev` | Menjalankan development server |
-| `npm run build` | Build aplikasi untuk production |
-| `npm run start` | Menjalankan production server |
-| `npm run lint` | Menjalankan ESLint |
-| `npm run db:migrate` | Menjalankan Prisma migrations |
-| `npm run db:seed` | Menjalankan database seeder |
-| `npm run db:studio` | Membuka Prisma Studio |
+| Command              | Deskripsi                       |
+| -------------------- | ------------------------------- |
+| `npm run dev`        | Menjalankan development server  |
+| `npm run build`      | Build aplikasi untuk production |
+| `npm run start`      | Menjalankan production server   |
+| `npm run lint`       | Menjalankan ESLint              |
+| `npm run db:migrate` | Menjalankan Prisma migrations   |
+| `npm run db:seed`    | Menjalankan database seeder     |
+| `npm run db:studio`  | Membuka Prisma Studio           |
 
 ---
 
