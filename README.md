@@ -27,7 +27,7 @@ Proyek ini dikembangkan sebagai tugas mata kuliah **Analisis dan Perancangan Sis
 
 | No  | Nama                     | NIM         | Role               | GitHub                                                                       |
 | :-: | ------------------------ | ----------- | ------------------ | ---------------------------------------------------------------------------- |
-|  1  | **Ananda Putra Utama**   | 20240050077 | 📋 Project Manager | [@Grooinon](https://github.com/Grooinon)                                     |
+|  1  | **Ananda Putra Utama**   | 20240050086 | 📋 Project Manager | [@Grooinon](https://github.com/Grooinon)                                     |
 |  2  | **Dipa Cahara Rakhman**  | 20240050053 | 💻 Web Developer   | [@Kaisen-7](https://github.com/Kaisen-7)                                     |
 |  3  | **M. Z. Haikal Hamdani** | 20240050147 | 🔍 System Analyst  | [@ZephyrGraphic](https://github.com/ZephyrGraphic)                           |
 |  4  | **Muhammad Dzakwan**     | 20240050013 | 📝 Sekretaris      | [@muhammaddzakwan434-creator](https://github.com/muhammaddzakwan434-creator) |
