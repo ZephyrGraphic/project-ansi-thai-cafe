@@ -87,7 +87,7 @@ Setelah semua file tersimpan di GitHub, saatnya mengirim email.
 
 - **Tujuan/To**: (E-mail Dosen)
 - **Subject**: `TR_ANSI_NamaKelompok_NamaKelas`
-  - _Contoh_: `TR_ANSI_Kelompok2_TI-3A`
+  - _Contoh_: `TR_ANSI_Kelompok2_SI24F`
 - **Isi Email**:
   - **Link GitHub**: (Copy link repository GitHub kamu di sini)
   - **Lampiran (Opsional tapi disarankan)**:
