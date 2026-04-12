@@ -28,6 +28,7 @@ interface SidebarContentProps {
 const waiterNavItems: NavItem[] = [
   { title: "Manajemen Meja", icon: "table_restaurant", href: "/waiter/tables" },
   { title: "Pesanan Aktif", icon: "receipt_long", href: "/waiter/orders" },
+  { title: "Waiting List", icon: "group_add", href: "/waiter/queue" },
   { title: "Riwayat Pesanan", icon: "history", href: "/waiter/history" },
   { title: "Pengaturan", icon: "settings", href: "/waiter/settings" },
 ];
