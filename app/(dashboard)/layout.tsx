@@ -16,11 +16,11 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen w-full bg-zinc-50 dark:bg-zinc-900">
+    <div className="flex h-screen w-full bg-surface-container font-headline text-on-surface m-0 p-0 overflow-hidden">
       <Sidebar user={session} />
-      <main className="flex-1 flex flex-col h-screen overflow-hidden relative bg-white">
+      <main className="flex-1 flex flex-col h-screen overflow-hidden relative bg-surface-bright">
         <Header user={session} />
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto no-scrollbar pb-10">
           {children}
         </div>
       </main>

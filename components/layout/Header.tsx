@@ -40,25 +40,28 @@ export function Header({ user }: HeaderProps) {
 
   return (
     <>
-      <header className="h-20 bg-white border-b border-slate-100 flex items-center justify-between px-6 md:px-8 shrink-0 font-display">
+      <header className="h-20 bg-surface-bright/80 backdrop-blur-md flex items-center justify-between px-6 md:px-10 shrink-0 font-headline z-40 sticky top-0 border-b border-surface-variant/30">
         <div className="flex items-center gap-4">
           {/* Mobile Menu Toggle */}
           <button 
-            className="md:hidden p-2 -ml-2 text-slate-500 hover:bg-slate-50 rounded-lg"
+            className="md:hidden p-2 -ml-2 text-on-surface hover:bg-surface-container rounded-lg"
             onClick={() => setIsMobileMenuOpen(true)}
           >
             <span className="material-symbols-outlined text-2xl">menu</span>
           </button>
 
-          <div className="flex flex-col">
-            <h2 className="text-xl font-bold text-slate-900 line-clamp-1">{getPageTitle()}</h2>
-            <p className="text-sm text-slate-500 hidden sm:block">
-              {currentDate || "Loading..."} • {user?.name || user?.username || "Guest"}
-            </p>
+          <div className="flex items-center gap-4 bg-surface-container-low border border-surface-variant rounded-xl px-4 py-2">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-primary hidden sm:inline">Halaman</span>
+            <h2 className="text-sm font-bold text-on-surface line-clamp-1">{getPageTitle()}</h2>
           </div>
         </div>
         <div className="flex items-center gap-6">
-          {/* Placeholder for future header items */}
+          <p className="text-[10px] uppercase font-bold tracking-widest text-outline hidden sm:block">
+            {currentDate || "Loading..."}
+          </p>
+          <div className="flex items-center justify-center p-2 rounded-full cursor-pointer hover:bg-surface-container transition-colors text-on-surface">
+            <span className="material-symbols-outlined text-[20px]">notifications</span>
+          </div>
         </div>
       </header>
 

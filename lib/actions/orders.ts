@@ -1,8 +1,15 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { deductStockForOrder } from "./inventory";
 
-type OrderStatus = "PENDING" | "PREPARING" | "READY" | "SERVED" | "COMPLETED" | "CANCELLED";
+type OrderStatus =
+  | "PENDING"
+  | "PREPARING"
+  | "READY"
+  | "SERVED"
+  | "COMPLETED"
+  | "CANCELLED";
 
 // ============ GET ORDERS ============
 export async function getOrders(status?: OrderStatus | OrderStatus[]) {
@@ -140,7 +147,7 @@ export async function updateOrderStatus(id: string, status: OrderStatus) {
 
 export async function addOrderItem(
   orderId: string,
-  item: { menuId: string; qty: number; notes?: string }
+  item: { menuId: string; qty: number; notes?: string },
 ) {
   const menu = await prisma.menu.findUnique({ where: { id: item.menuId } });
   if (!menu) throw new Error("Menu not found");
@@ -172,7 +179,7 @@ export async function removeOrderItem(orderDetailId: string) {
   const orderDetail = await prisma.orderDetail.findUnique({
     where: { id: orderDetailId },
   });
-  
+
   if (!orderDetail) throw new Error("Order item not found");
 
   await prisma.orderDetail.delete({ where: { id: orderDetailId } });
@@ -186,4 +193,64 @@ export async function removeOrderItem(orderDetailId: string) {
   });
 
   return true;
+}
+
+// ============ CREATE SELF ORDER (CUSTOMER) ============
+export async function createSelfOrder(data: {
+  tableId: string;
+  customerName: string;
+  queueId?: string;
+  notes?: string;
+  items: { menuId: string; qty: number; notes?: string }[];
+}) {
+  // Calculate totals
+  const menus = await prisma.menu.findMany({
+    where: { id: { in: data.items.map((i) => i.menuId) } },
+  });
+
+  const orderItems = data.items.map((item) => {
+    const menu = menus.find((m) => m.id === item.menuId);
+    return {
+      menuId: item.menuId,
+      qty: item.qty,
+      subtotal: (menu?.price || 0) * item.qty,
+      notes: item.notes,
+    };
+  });
+
+  const totalAmount = orderItems.reduce((sum, item) => sum + item.subtotal, 0);
+
+  // Update table status to occupied if it isn't already
+  await prisma.table.update({
+    where: { id: data.tableId },
+    data: { status: "OCCUPIED" },
+  });
+
+  const order = await prisma.order.create({
+    data: {
+      tableId: data.tableId,
+      customerName: data.customerName,
+      queueId: data.queueId,
+      source: "CUSTOMER", // Source enum
+      notes: data.notes,
+      totalAmount,
+      orderItems: {
+        create: orderItems,
+      },
+    },
+    include: {
+      table: true,
+      orderItems: { include: { menu: true } },
+    },
+  });
+
+  // Attempt to immediately deduct stock because self-orders are live
+  try {
+    await deductStockForOrder(order.id);
+  } catch (error) {
+    console.error("Failed to automatically deduct stock on self-order", error);
+    // Even if it fails, we keep the order and just log it.
+  }
+
+  return order;
 }

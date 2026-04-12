@@ -1,0 +1,164 @@
+<mxfile host="Electron" modified="2024-03-08T16:05:00.000Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" version="21.6.8" type="device">
+  <diagram id="activity_self_order" name="Activity Diagram: Self Rule Ordering &amp; Queue">
+    <mxGraphModel dx="1242" dy="816" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="ACTIVITY DIAGRAM: SELF ORDERING &amp; QUEUEING" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="500" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Swimlanes -->
+        <mxCell id="lane_pelanggan" value="Pelanggan (Customer)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" vertex="1" parent="1">
+          <mxGeometry x="40" y="50" width="220" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_sistem" value="Sistem (System)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" vertex="1" parent="1">
+          <mxGeometry x="260" y="50" width="260" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_dapur" value="Dapur (Kitchen)" style="swimlane;whiteSpace=wrap;html=1;startSize=23;" vertex="1" parent="1">
+          <mxGeometry x="520" y="50" width="240" height="850" as="geometry" />
+        </mxCell>
+
+        <!-- Nodes Pelanggan -->
+        <mxCell id="start" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#ff0000;" vertex="1" parent="lane_pelanggan">
+          <mxGeometry x="95" y="40" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="A" value="Buka Sistem / Kios" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane_pelanggan">
+          <mxGeometry x="50" y="100" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="B_dec" value="Meja Kosong?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="lane_pelanggan">
+          <mxGeometry x="60" y="170" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="C" value="Isi Form Waiting List" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane_pelanggan">
+          <mxGeometry x="50" y="260" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="E" value="Scan QR Code Meja" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane_pelanggan">
+          <mxGeometry x="50" y="340" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="F" value="Pilih Menu &amp; Checkout" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane_pelanggan">
+          <mxGeometry x="50" y="410" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="WaitUI" value="Tunggu Pesanan" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane_pelanggan">
+          <mxGeometry x="50" y="780" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="end" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;" vertex="1" parent="lane_pelanggan">
+          <mxGeometry x="95" y="860" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Nodes Sistem -->
+        <mxCell id="D" value="Catat Antrean &amp; Tampilkan Urutan" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane_sistem">
+          <mxGeometry x="60" y="260" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="G" value="Validasi Pesanan &amp; Hitung Total" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane_sistem">
+          <mxGeometry x="60" y="410" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="H" value="Ambil Data Resep/BOM" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane_sistem">
+          <mxGeometry x="60" y="480" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="I_dec" value="Stok Cukup?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="lane_sistem">
+          <mxGeometry x="85" y="550" width="90" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="J" value="Catat Status Order: PENDING" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane_sistem">
+          <mxGeometry x="55" y="640" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="K" value="Kurangi Stok Bahan Baku" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane_sistem">
+          <mxGeometry x="55" y="710" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="L" value="Catat Stock Log: OUT" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane_sistem">
+          <mxGeometry x="55" y="780" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="O" value="Notif ke Layar Dapur" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane_sistem">
+          <mxGeometry x="55" y="850" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="N" value="Notif Menu Habis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="lane_sistem">
+          <mxGeometry x="220" y="560" width="110" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Nodes Dapur -->
+        <mxCell id="P" value="Lihat Antrean Dapur &amp; Memasak" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="lane_dapur">
+          <mxGeometry x="40" y="850" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Q" value="Update Status: READY" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="lane_dapur">
+          <mxGeometry x="40" y="920" width="160" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e_start_A" edge="1" parent="lane_pelanggan" source="start" target="A">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_A_B" edge="1" parent="lane_pelanggan" source="A" target="B_dec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_B_C" edge="1" parent="lane_pelanggan" source="B_dec" target="C" value="Tidak">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_B_E" edge="1" parent="lane_pelanggan" source="B_dec" target="E" value="Ya">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="180" y="200" />
+              <mxPoint x="180" y="320" />
+              <mxPoint x="110" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_E_F" edge="1" parent="lane_pelanggan" source="E" target="F">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="e_C_D" edge="1" parent="1" source="C" target="D">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_F_G" edge="1" parent="1" source="F" target="G">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_G_H" edge="1" parent="lane_sistem" source="G" target="H">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_H_I" edge="1" parent="lane_sistem" source="H" target="I_dec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_I_J" edge="1" parent="lane_sistem" source="I_dec" target="J" value="Ya">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_I_N" edge="1" parent="lane_sistem" source="I_dec" target="N" value="Tidak">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_N_F" edge="1" parent="1" source="N" target="F" style="edgeStyle=orthogonalEdgeStyle;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+             <Array as="points">
+              <mxPoint x="550" y="630" />
+              <mxPoint x="550" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_J_K" edge="1" parent="lane_sistem" source="J" target="K">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_K_L" edge="1" parent="lane_sistem" source="K" target="L">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_L_O" edge="1" parent="lane_sistem" source="L" target="O">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="e_O_P" edge="1" parent="1" source="O" target="P">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_P_Q" edge="1" parent="lane_dapur" source="P" target="Q">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_Q_Wait" edge="1" parent="1" source="Q" target="WaitUI" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" value="Update Status">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="640" y="1030" />
+              <mxPoint x="150" y="1030" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_Wait_end" edge="1" parent="lane_pelanggan" source="WaitUI" target="end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,242 @@
+<mxfile host="Electron" modified="2024-03-08T16:05:00.000Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.8 Chrome/114.0.5735.289 Electron/25.5.0 Safari/537.36" version="21.6.8" type="device">
+  <diagram id="sequence_self_order" name="Sequence Diagram: Self Order &amp; Queue">
+    <mxGraphModel dx="1242" dy="816" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="SEQUENCE DIAGRAM: SELF-ORDERING &amp; QUEUEING" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="550" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Lifelines Base Group -->
+        <mxCell id="seq_group" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="40" y="60" width="1000" height="1000" as="geometry" />
+        </mxCell>
+
+        <!-- Actor Customer -->
+        <mxCell id="actor_cust" value="Customer" style="shape=umlLifeline;participant=umlActor;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;spacingTop=36;outlineConnect=0;" vertex="1" parent="seq_group">
+          <mxGeometry x="0" y="0" width="20" height="950" as="geometry" />
+        </mxCell>
+        <mxCell id="act_cust_bar" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="actor_cust">
+          <mxGeometry x="5" y="60" width="10" height="850" as="geometry" />
+        </mxCell>
+
+        <!-- UI CustomerUI -->
+        <mxCell id="ui_front" value=":CustomerUI" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlBoundary;size=60;" vertex="1" parent="seq_group">
+          <mxGeometry x="120" y="0" width="90" height="950" as="geometry" />
+        </mxCell>
+        <mxCell id="ui_front_bar1" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="ui_front">
+          <mxGeometry x="40" y="65" width="10" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ui_front_bar2" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="ui_front">
+          <mxGeometry x="40" y="240" width="10" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ui_front_bar3" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="ui_front">
+          <mxGeometry x="40" y="380" width="10" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- Control TableController -->
+        <mxCell id="ctrl_table" value=":TableController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlControl;size=60;" vertex="1" parent="seq_group">
+          <mxGeometry x="270" y="0" width="100" height="950" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_tbl_bar" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="ctrl_table">
+          <mxGeometry x="45" y="75" width="10" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Control OrderController -->
+        <mxCell id="ctrl_order" value=":OrderController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlControl;size=60;" vertex="1" parent="seq_group">
+          <mxGeometry x="430" y="0" width="110" height="950" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_ord_bar1" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="ctrl_order">
+          <mxGeometry x="50" y="250" width="10" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_ord_bar2" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="ctrl_order">
+          <mxGeometry x="50" y="400" width="10" height="400" as="geometry" />
+        </mxCell>
+
+        <!-- Entity Recipe -->
+        <mxCell id="ent_recipe" value=":Recipe" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlEntity;size=60;" vertex="1" parent="seq_group">
+          <mxGeometry x="600" y="0" width="90" height="950" as="geometry" />
+        </mxCell>
+        <mxCell id="ent_rec_bar" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="ent_recipe">
+          <mxGeometry x="40" y="460" width="10" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Control InvController -->
+        <mxCell id="ctrl_inv" value=":InvController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlControl;size=60;" vertex="1" parent="seq_group">
+          <mxGeometry x="740" y="0" width="100" height="950" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_inv_bar" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="ctrl_inv">
+          <mxGeometry x="45" y="550" width="10" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- UI KitchenUI -->
+        <mxCell id="ui_kitchen" value=":KitchenUI" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};participant=umlBoundary;size=60;" vertex="1" parent="seq_group">
+          <mxGeometry x="890" y="0" width="90" height="950" as="geometry" />
+        </mxCell>
+        <mxCell id="ui_kit_bar" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="ui_kitchen">
+          <mxGeometry x="40" y="720" width="10" height="150" as="geometry" />
+        </mxCell>
+
+
+        <!-- Messages (Skenario Penuh) -->
+        <!-- 1: Waiting List -->
+        <mxCell id="msg1" value="1: clickWaitingList(name, pax)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="15" y="70" as="sourcePoint" />
+            <mxPoint x="160" y="70" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg2" value="2: requestQueueSlot(name, pax)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="170" y="80" as="sourcePoint" />
+            <mxPoint x="315" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg3" value="3: return QueueNo &amp; Est. Time" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="315" y="110" as="sourcePoint" />
+            <mxPoint x="170" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg4" value="4: display Queue Details" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="160" y="130" as="sourcePoint" />
+            <mxPoint x="15" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Divider -->
+        <mxCell id="note_divider" value="-- Customer Dipanggil &amp; Duduk di Meja-- " style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=2;fontSize=12;fontColor=#666666;" vertex="1" parent="seq_group">
+          <mxGeometry x="40" y="170" width="800" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="line_divider" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;" edge="1" parent="seq_group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="0" y="180" as="sourcePoint" />
+            <mxPoint x="950" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 2: Scan QR & Menu -->
+        <mxCell id="msg5" value="5: scanQR(tableNo)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="15" y="245" as="sourcePoint" />
+            <mxPoint x="160" y="245" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg6" value="6: getMenuStoreFront()" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="170" y="260" as="sourcePoint" />
+            <mxPoint x="480" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg7" value="7: return List&lt;Menu&gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="480" y="290" as="sourcePoint" />
+            <mxPoint x="170" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 3: Order Placement -->
+        <mxCell id="msg8" value="8: addToCart() -&gt; clickOrder()" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="15" y="390" as="sourcePoint" />
+            <mxPoint x="160" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg9" value="9: createSelfOrder(tableNo, items)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="170" y="410" as="sourcePoint" />
+            <mxPoint x="480" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Loops BOM/Stock Deduct -->
+        <mxCell id="loop_outer" value="loop" style="shape=umlFrame;whiteSpace=wrap;html=1;width=40;height=20;" vertex="1" parent="seq_group">
+          <mxGeometry x="400" y="430" width="460" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="loopTxt" value="[For each OrderItem]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="seq_group">
+          <mxGeometry x="445" y="430" width="130" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="msg10" value="10: getRecipe(menuID)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="490" y="470" as="sourcePoint" />
+            <mxPoint x="640" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg11" value="11: return IngredientQtyNeeded" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="640" y="500" as="sourcePoint" />
+            <mxPoint x="490" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="loop_inner" value="loop" style="shape=umlFrame;whiteSpace=wrap;html=1;width=40;height=20;" vertex="1" parent="seq_group">
+          <mxGeometry x="420" y="520" width="420" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="loopTxt2" value="[For each Ingredient]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="seq_group">
+          <mxGeometry x="470" y="520" width="130" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="msg12" value="12: reduceStock(ingredientID, qty)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="490" y="565" as="sourcePoint" />
+            <mxPoint x="785" y="565" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg13" value="13: createLog(&quot;OUT&quot;, qty)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="490" y="600" as="sourcePoint" />
+            <mxPoint x="785" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg14" value="14: return true" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="785" y="620" as="sourcePoint" />
+            <mxPoint x="490" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Finalizing Order -->
+        <mxCell id="msg15" value="15: displaySuccess(orderID), Status: PENDING" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="480" y="690" as="sourcePoint" />
+            <mxPoint x="170" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg16" value="16: notifyStaffNewOrder(tableNo, items)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="490" y="730" as="sourcePoint" />
+            <mxPoint x="930" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Cooking Process -->
+        <mxCell id="msg17" value="17: Memasak (Staff) -> klik Ready" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="940" y="750" as="sourcePoint" />
+            <mxPoint x="940" y="800" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="980" y="750" />
+              <mxPoint x="980" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg18" value="18: updateStatus(orderID, &quot;READY&quot;)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="930" y="820" as="sourcePoint" />
+            <mxPoint x="490" y="820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg19" value="19: notifikasi Pesanan Siap / Antar" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;" edge="1" parent="seq_group">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="480" y="860" as="sourcePoint" />
+            <mxPoint x="15" y="860" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
