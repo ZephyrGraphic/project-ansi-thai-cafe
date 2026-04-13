@@ -33,6 +33,7 @@ export default function OrdersPageClient({ menus, categories, tables }: OrdersPa
   const [selectedTable, setSelectedTable] = useState(preselectedTable || "");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [activeCategory, setActiveCategory] = useState("all");
+  const [pax, setPax] = useState<number>(1);
   const [orderNotes, setOrderNotes] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("tunai");
 
@@ -80,11 +81,17 @@ export default function OrdersPageClient({ menus, categories, tables }: OrdersPa
   const handleSubmitOrder = async () => {
     if (!selectedTable || cart.length === 0) return;
 
+    const table = availableTables.find(t => t.id === selectedTable);
+    if (table && pax > table.capacity) {
+      alert(`Kapasitas Meja ${table.tableNo} maksimal ${table.capacity} orang, tidak muat untuk ${pax} orang!`);
+      return;
+    }
+
     startTransition(async () => {
       try {
         await createOrder({
           tableId: selectedTable,
-          notes: orderNotes + (paymentMethod !== "tunai" ? ` [Metode: ${paymentMethod}]` : ""),
+          notes: `[Pax: ${pax} Orang] ` + orderNotes + (paymentMethod !== "tunai" ? ` [Metode: ${paymentMethod}]` : ""),
           items: cart.map(item => ({
             menuId: item.menuId,
             qty: item.qty,
@@ -240,13 +247,28 @@ export default function OrdersPageClient({ menus, categories, tables }: OrdersPa
 
             {/* Footer Section */}
             <div className="mt-6 pt-6 shrink-0 bg-surface-container-lowest">
-               <textarea 
-                  placeholder="Catatan pesanan umum..."
-                  value={orderNotes}
-                  onChange={(e) => setOrderNotes(e.target.value)}
-                  className="w-full bg-surface-container-low border border-surface-variant rounded-xl px-4 py-3 text-xs mb-5 font-medium resize-none shadow-inner focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-                  rows={2}
-               />
+               <div className="flex gap-4 mb-5">
+                 <textarea 
+                    placeholder="Catatan pesanan umum..."
+                    value={orderNotes}
+                    onChange={(e) => setOrderNotes(e.target.value)}
+                    className="flex-1 bg-surface-container-low border border-surface-variant rounded-xl px-4 py-3 text-xs font-medium resize-none shadow-inner focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                    rows={2}
+                 />
+                 <div className="w-[100px] shrink-0">
+                    <label className="block text-[10px] font-bold text-outline uppercase tracking-widest mb-1.5 px-1">Orang (Pax)</label>
+                    <div className="bg-surface-container-low border border-surface-variant rounded-xl px-3 py-[9px] flex items-center shadow-inner focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+                       <span className="material-symbols-outlined text-outline text-[16px] mr-2">group</span>
+                       <input 
+                         type="number"
+                         min="1"
+                         value={pax || ""}
+                         onChange={(e) => setPax(parseInt(e.target.value) || 0)}
+                         className="w-full bg-transparent border-none text-xs font-bold text-center p-0 outline-none focus:ring-0 focus:outline-none"
+                       />
+                    </div>
+                 </div>
+               </div>
                <div className="mb-6">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-outline mb-2 block">Metode Pembayaran</span>
                   <div className="grid grid-cols-2 gap-2">

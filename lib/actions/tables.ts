@@ -22,6 +22,11 @@ export async function getTables() {
   });
 }
 
+export async function getTotalTableCapacity() {
+  const tables = await prisma.table.findMany();
+  return tables.reduce((acc, t) => acc + t.capacity, 0) || 20;
+}
+
 export async function getTableById(id: string) {
   return await prisma.table.findUnique({
     where: { id },

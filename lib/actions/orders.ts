@@ -56,6 +56,19 @@ export async function getActiveOrders() {
   });
 }
 
+export async function getTableActiveOrders(tableId: string) {
+  return await prisma.order.findMany({
+    where: {
+      tableId,
+      status: { notIn: ["COMPLETED", "CANCELLED"] },
+    },
+    include: {
+      orderItems: { include: { menu: true } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 export async function getKitchenOrders() {
   return await prisma.order.findMany({
     where: {

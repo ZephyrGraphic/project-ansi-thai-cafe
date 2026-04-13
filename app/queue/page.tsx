@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { Coffee, Users, Phone, User, Clock, CheckCircle2 } from "lucide-react";
-import { joinQueue } from "@/lib/actions";
+import { joinQueue, getTotalTableCapacity } from "@/lib/actions";
 
 export default function QueuePage() {
   const [loading, setLoading] = useState(false);
@@ -14,10 +14,19 @@ export default function QueuePage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [pax, setPax] = useState<number>(2);
+  const [maxCapacity, setMaxCapacity] = useState<number>(20);
+
+  useEffect(() => {
+    getTotalTableCapacity().then(cap => setMaxCapacity(cap)).catch(console.error);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !phone || pax < 1) return;
+    if (pax > maxCapacity) {
+      alert(`Mohon maaf, restoran kami hanya memiliki meja dengan kapasitas maksimal ${maxCapacity} orang.`);
+      return;
+    }
 
     setLoading(true);
     try {
@@ -158,10 +167,10 @@ export default function QueuePage() {
                   id="pax"
                   type="number"
                   min="1"
-                  max="20"
+                  max={maxCapacity}
                   required
-                  value={pax}
-                  onChange={(e) => setPax(parseInt(e.target.value))}
+                  value={pax || ""}
+                  onChange={(e) => setPax(parseInt(e.target.value) || 0)}
                   className="pl-12 block w-full rounded-xl sm:text-sm py-4 px-4 bg-surface-container-low border-none focus:ring-2 focus:ring-primary font-medium text-on-surface"
                 />
               </div>

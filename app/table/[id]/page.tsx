@@ -26,6 +26,7 @@ export default async function TableOrderingPage(props: {
         <ClientOrderUI
           tableId={table.id}
           tableNo={table.tableNo}
+          tableCapacity={table.capacity}
           categories={activeCategories}
           menus={activeMenus}
           queueId={searchParams.queueId}

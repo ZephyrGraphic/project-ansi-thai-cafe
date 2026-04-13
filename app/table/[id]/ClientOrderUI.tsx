@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { createSelfOrder } from "@/lib/actions";
+import { useState, useEffect } from "react";
+import { createSelfOrder, getTableActiveOrders } from "@/lib/actions";
 import {
   Minus,
   Plus,
@@ -9,17 +9,21 @@ import {
   X,
   CheckCircle2,
   Loader2,
+  Receipt,
+  RotateCw,
 } from "lucide-react";
 
 export default function ClientOrderUI({
   tableId,
   tableNo,
+  tableCapacity,
   categories,
   menus,
   queueId,
 }: {
   tableId: string;
   tableNo: number;
+  tableCapacity: number;
   categories: any[];
   menus: any[];
   queueId?: string;
@@ -30,11 +34,34 @@ export default function ClientOrderUI({
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState("all");
   const [customerName, setCustomerName] = useState("");
+  const [pax, setPax] = useState<number>(1);
   const [orderNotes, setOrderNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [createdOrderId, setCreatedOrderId] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("tunai");
+  
+  const [isStatusOpen, setIsStatusOpen] = useState(false);
+  const [activeOrders, setActiveOrders] = useState<any[]>([]);
+  const [loadingStatus, setLoadingStatus] = useState(false);
+
+  const fetchStatus = async () => {
+    setLoadingStatus(true);
+    try {
+      const orders = await getTableActiveOrders(tableId);
+      setActiveOrders(orders);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingStatus(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isStatusOpen) {
+      fetchStatus();
+    }
+  }, [isStatusOpen]);
 
   const addToCart = (menuId: string) => {
     setCart((prev) => {
@@ -80,13 +107,19 @@ export default function ClientOrderUI({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!customerName || cart.length === 0) return;
+    
+    if (pax > tableCapacity) {
+      alert(`Mohon maaf, jumlah orang (${pax}) melebihi kapasitas maksimum Meja ${tableNo} yaitu ${tableCapacity} orang.`);
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await createSelfOrder({
         tableId,
         customerName,
         queueId,
-        notes: orderNotes + (paymentMethod !== "tunai" ? ` [Metode: ${paymentMethod}]` : ""),
+        notes: `[Pax: ${pax} Orang] ` + orderNotes + (paymentMethod !== "tunai" ? ` [Metode: ${paymentMethod}]` : ""),
         items: cart,
       });
       setCreatedOrderId(res.id);
@@ -131,6 +164,82 @@ export default function ClientOrderUI({
         >
           PESAN LAGI
         </button>
+      </div>
+    );
+  }
+
+  // STATUS VIEW
+  if (isStatusOpen) {
+    return (
+      <div className="bg-surface text-on-surface min-h-screen pb-32 font-body selection:bg-primary-container">
+        <header className="w-full sticky top-0 z-40 bg-surface-bright flex justify-between items-center px-6 py-4 shadow-sm">
+          <div className="flex items-center gap-4">
+            <button onClick={() => setIsStatusOpen(false)} className="tap-highlight-transparent active:scale-95 transition-transform text-primary">
+              <span className="material-symbols-outlined">arrow_back</span>
+            </button>
+            <h1 className="text-xl font-headline font-bold text-primary tracking-tight">KEMBALI MENU</h1>
+          </div>
+          <button onClick={fetchStatus} disabled={loadingStatus} className="flex items-center text-primary disabled:opacity-50">
+             <RotateCw className={`w-5 h-5 ${loadingStatus ? 'animate-spin' : ''}`} />
+          </button>
+        </header>
+
+        <main className="px-6 py-6 max-w-md mx-auto">
+          <section className="mb-8">
+            <h2 className="font-headline text-3xl font-extrabold text-on-surface tracking-tight leading-tight">
+              Status <span className="text-primary">Pesanan</span>
+            </h2>
+            <p className="font-body text-sm text-on-surface-variant mt-2">Pantau pesanan aktif untuk Meja {tableNo}.</p>
+          </section>
+
+          {loadingStatus && activeOrders.length === 0 ? (
+            <div className="flex justify-center items-center py-20">
+              <Loader2 className="w-8 h-8 text-primary animate-spin" />
+            </div>
+          ) : activeOrders.length === 0 ? (
+            <div className="bg-surface-container-low rounded-xl p-8 text-center text-on-surface-variant font-medium">
+              Tidak ada pesanan aktif saat ini.
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {activeOrders.map((order) => (
+                <div key={order.id} className="bg-surface-container-lowest rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.02)] border border-surface-variant/30">
+                  <div className="flex justify-between items-center mb-4 border-b border-surface-variant/50 pb-3">
+                    <div>
+                      <p className="text-xs text-outline font-bold uppercase tracking-wider mb-1">Order ID</p>
+                      <p className="font-headline text-primary font-bold">{order.id.slice(-6).toUpperCase()}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-outline font-bold uppercase tracking-wider mb-1">Status</p>
+                      {order.status === "PENDING" && <span className="bg-secondary text-on-secondary px-3 py-1 rounded-full text-xs font-bold">Menunggu</span>}
+                      {order.status === "PREPARING" && <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold">Dimasak</span>}
+                      {order.status === "READY" && <span className="bg-primary text-on-primary px-3 py-1 rounded-full text-xs font-bold">Siap Diantar</span>}
+                      {order.status === "SERVED" && <span className="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-xs font-bold">Telah Diantar</span>}
+                    </div>
+                  </div>
+                  <div className="space-y-3 mb-4">
+                    {order.orderItems.map((item: any) => (
+                      <div key={item.id} className="flex justify-between text-sm">
+                        <div className="flex gap-2">
+                          <span className="font-bold text-on-surface-variant">{item.qty}x</span>
+                          <div>
+                            <p className="font-semibold text-on-surface">{item.menu.name}</p>
+                            {item.notes && <p className="text-xs text-on-surface-variant italic">{item.notes}</p>}
+                          </div>
+                        </div>
+                        <span className="font-bold text-on-surface">Rp {item.subtotal.toLocaleString("id-ID")}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="bg-surface-container-low -mx-5 -mb-5 p-4 rounded-b-2xl mt-4 flex justify-between items-center border-t border-surface-variant/50">
+                    <span className="text-xs font-bold tracking-wider text-on-surface-variant uppercase">Total Bayar</span>
+                    <span className="font-headline font-black text-lg text-primary">Rp {order.totalAmount.toLocaleString("id-ID")}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </main>
       </div>
     );
   }
@@ -236,11 +345,28 @@ export default function ClientOrderUI({
               </div>
             </section>
             
-            <section>
-              <label className="font-label text-sm font-semibold text-on-surface-variant block mb-2 px-1">Meja</label>
-              <div className="bg-surface-container-highest rounded-xl p-4 flex items-center gap-3">
-                 <span className="material-symbols-outlined text-outline">table_restaurant</span>
-                 <input className="w-full bg-transparent border-none focus:ring-0 text-sm font-body p-0" value={`Meja ${tableNo}`} disabled />
+            <section className="flex gap-4">
+              <div className="flex-1">
+                <label className="font-label text-sm font-semibold text-on-surface-variant block mb-2 px-1">Meja</label>
+                <div className="bg-surface-container-highest rounded-xl p-4 flex items-center gap-3 h-[52px]">
+                   <span className="material-symbols-outlined text-outline">table_restaurant</span>
+                   <input className="w-full bg-transparent border-none focus:ring-0 text-sm font-body p-0" value={`Meja ${tableNo}`} disabled />
+                </div>
+              </div>
+              <div className="w-[120px]">
+                <label className="font-label text-sm font-semibold text-on-surface-variant block mb-2 px-1">Orang (Pax)</label>
+                <div className="bg-surface-container-highest rounded-xl p-4 focus-within:ring-1 ring-primary flex items-center gap-2 h-[52px]">
+                   <span className="material-symbols-outlined text-outline">group</span>
+                   <input 
+                     type="number" 
+                     min="1" 
+                     max={tableCapacity}
+                     required
+                     value={pax || ""}
+                     onChange={(e) => setPax(parseInt(e.target.value) || 0)}
+                     className="w-full bg-transparent border-none focus:ring-0 text-sm font-body p-0 text-center font-bold" 
+                   />
+                </div>
               </div>
             </section>
 
@@ -447,11 +573,11 @@ export default function ClientOrderUI({
 
       {/* BottomNavBar */}
       <nav className="fixed bottom-0 left-0 w-full z-50 bg-white/90 backdrop-blur-xl px-4 pb-6 pt-3 flex justify-around items-center rounded-t-3xl shadow-[0_-12px_32px_rgba(0,0,0,0.06)] border-t border-surface-variant/20">
-        <button className="flex flex-col items-center justify-center text-primary font-bold transition-transform duration-200 active:scale-95 gap-1">
+        <button onClick={() => { setIsCartOpen(false); setIsStatusOpen(false); }} className="flex flex-col items-center justify-center text-primary font-bold transition-transform duration-200 active:scale-95 gap-1">
           <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>home</span>
           <span className="font-body text-[10px] font-bold uppercase tracking-wider">Beranda</span>
         </button>
-        <button onClick={() => { if(totalItems > 0) setIsCartOpen(true) }} className={`flex flex-col items-center justify-center transition-colors duration-200 active:scale-95 gap-1 ${totalItems > 0 ? 'text-on-surface' : 'text-outline'}`}>
+        <button onClick={() => { setIsCartOpen(true); setIsStatusOpen(false); }} className={`flex flex-col items-center justify-center transition-colors duration-200 active:scale-95 gap-1 ${totalItems > 0 ? 'text-on-surface' : 'text-outline hover:text-on-surface'}`}>
           <div className="relative">
              <span className="material-symbols-outlined">shopping_cart</span>
              {totalItems > 0 && (
@@ -460,8 +586,7 @@ export default function ClientOrderUI({
           </div>
           <span className="font-body text-[10px] font-bold uppercase tracking-wider">Keranjang</span>
         </button>
-        {/* Placeholder buttons for purely UI display based on user template */}
-        <button className="flex flex-col items-center justify-center text-outline hover:text-primary transition-colors duration-200 active:scale-95 gap-1">
+        <button onClick={() => { setIsStatusOpen(true); setIsCartOpen(false); }} className="flex flex-col items-center justify-center text-outline hover:text-on-surface transition-colors duration-200 active:scale-95 gap-1">
           <span className="material-symbols-outlined">receipt_long</span>
           <span className="font-body text-[10px] font-bold uppercase tracking-wider">Status</span>
         </button>
