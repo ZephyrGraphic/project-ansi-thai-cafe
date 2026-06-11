@@ -84,21 +84,22 @@ Proyek ini dikembangkan sebagai tugas mata kuliah **Analisis dan Perancangan Sis
 
 ## 🎨 UI/UX - The Botanical Gallery
 
-Antarmuka aplikasi telah dirancang ulang (remake) secara menyeluruh menggunakan konsep desain **"The Botanical Gallery"** yang menghadirkan nuansa alam modern dan premium.
+Antarmuka aplikasi menggunakan konsep **"The Botanical Gallery"**: nuansa cafe Thailand yang hangat, botanical, dan tetap efisien untuk operasional staff. Remake terbaru memprioritaskan pengalaman login, shell dashboard, admin cockpit, public queue, dan self-order pelanggan.
 
 ### Tema Desain Sistem Cafe (Staff Dashboard)
 
-- **Slim Iconic Sidebar (80px)** — Navigasi vertikal ramping dengan ikon Material Symbols
-- **Glassmorphism Header** — Header transparan mengambang dengan efek `backdrop-blur`
-- **Botanical Color Palette** — Seluruh variabel warna ShadCN/Tailwind di-mapping ke palet hijau botani (`Primary: #006B0A`, `Accent: #59EE50`, `Surface: #F4F7F4`)
-- **Tipografi Konsisten** — Font `Plus Jakarta Sans` sebagai headline utama
+- **Split Login Experience** — Halaman login dua panel dengan visual brand, akun demo cepat, dan feedback error yang jelas
+- **Role-Aware Sidebar** — Sidebar desktop informatif dengan label modul, akses navigasi per-role, dan drawer mobile
+- **Operational Header** — Header menampilkan konteks workspace, tanggal, operator aktif, dan tombol navigasi mobile
+- **Manager Cockpit** — Dashboard admin menampilkan pendapatan harian, pesanan aktif, okupansi meja, alert stok, dan aksi cepat
+- **Botanical Design Tokens** — Palet hijau botani, brass, ivory, dan chili red disimpan di `app/globals.css` sebagai utility visual
 
 ### Tema Desain Mobile Pelanggan (Customer UI)
 
-- **Mobile-First Layout** — Antarmuka yang dioptimalkan untuk layar HP
-- **Bottom Navigation Bar** — Navigasi bawah (Menu, Status, Akun) untuk akses cepat
-- **Floating Cart Button** — Tombol keranjang belanja melayang dengan badge jumlah item
-- **Botanical Green Accents** — Gradien hijau dan kontainer bertekstur botani
+- **Self-Order Mobile First** — Halaman `/table/[id]` dibuat untuk scan QR meja, browsing menu, cart, dan status order aktif
+- **Digital Queue Public Page** — Halaman `/queue` memiliki hero branded, form antrean, estimasi posisi, dan success state
+- **Local Brand Assets** — Aset SVG dibuat lokal di `public/assets` agar UI tidak bergantung pada file eksternal untuk identitas visual
+- **Responsive Shell** — Layout staff dan pelanggan disiapkan untuk desktop, tablet, dan mobile tanpa mengubah alur kerja utama
 
 ---
 
@@ -137,11 +138,14 @@ ansi-thai-cafe/
 │   └── ui/                  # Reusable UI components (Radix)
 ├── lib/
 │   ├── actions/             # Server Actions (Orders, Payments, etc.)
+│   ├── demo-data.ts          # Data demo development ketika database tidak tersedia
+│   ├── demo-fallback.ts      # Helper fallback koneksi database saat development
 │   └── utils/               # Utilities & configurations
 ├── prisma/
 │   ├── schema.prisma        # Database schema (12 model)
 │   └── seed.ts              # Database seeder
-└── public/                  # Static assets
+└── public/
+    └── assets/              # Brand mark, pattern, plate, dan QR illustration SVG
 ```
 
 ---
@@ -176,7 +180,10 @@ ansi-thai-cafe/
    ```env
    DATABASE_URL="postgresql://user:password@host:port/database?pgbouncer=true"
    DIRECT_URL="postgresql://user:password@host:port/database"
+   NEXT_PUBLIC_APP_URL="http://localhost:3000"
    ```
+
+   Jika memakai Supabase, pastikan project database sudah **aktif/restored** sebelum menjalankan Prisma atau login. Project yang paused/restoring akan memunculkan error seperti `Can't reach database server`.
 
 4. **Setup database**
 
@@ -200,6 +207,24 @@ ansi-thai-cafe/
 6. **Buka browser**
 
    Akses [http://localhost:3000](http://localhost:3000)
+
+### Akun Demo Seed
+
+Setelah menjalankan `npm run db:seed`, gunakan akun berikut untuk mencoba dashboard:
+
+| Role | Username | Password |
+|---|---|---|
+| Admin | `admin` | `admin123` |
+| Kasir | `kasir` | `kasir123` |
+| Waiter | `waiter` | `waiter123` |
+| Kitchen | `kitchen` | `kitchen123` |
+
+### Troubleshooting Database
+
+- Jika login menampilkan error server atau Prisma menulis `Can't reach database server`, cek kembali apakah Supabase sudah aktif/restored.
+- Pastikan `DATABASE_URL` dan `DIRECT_URL` di `.env` masih sesuai dengan connection string terbaru dari Supabase.
+- Setelah mengubah `.env` atau restore database, restart dev server dengan `Ctrl+C`, lalu jalankan lagi `npm run dev`.
+- Saat development, repo memiliki fallback data demo untuk beberapa halaman utama ketika database tidak tersedia. Untuk memaksa aplikasi selalu gagal jika database mati, set `DISABLE_DEMO_FALLBACK=true`.
 
 ---
 
@@ -251,11 +276,18 @@ Aplikasi ini menggunakan model database berikut:
 
 ## 🔄 Changelog
 
+### v2.1 — Botanical Refresh & Local Assets (Juni 2026)
+- 🖼️ **Local SVG Assets** — Brand mark, botanical pattern, plated menu illustration, dan QR order card tersedia di `public/assets`
+- 🔐 **Login Refresh** — Halaman login mendapat split layout, akun demo cepat, dan visual brand yang lebih kuat
+- 📊 **Admin Cockpit** — Dashboard admin difokuskan pada metric operasional, okupansi, aksi cepat, dan alert stok
+- 🧭 **Dashboard Shell Update** — Sidebar dan header dibuat lebih informatif untuk multi-role workflow
+- 🛟 **Dev Database Fallback** — Data demo development membantu UI tetap bisa dicek saat Supabase belum aktif/restored
+
 ### v2.0 — UI/UX Remake "The Botanical Gallery" (April 2026)
-- 🎨 **Full UI Remake** — Seluruh antarmuka sistem (Admin, Kasir, Waiter, Kitchen) dirombak ke desain "The Botanical Gallery"
-- 🪟 **Glassmorphism Layout** — Header transparan + Slim Sidebar (80px) dengan ikon Material Symbols
+- 🎨 **UI Remake Foundation** — Fondasi antarmuka sistem mulai diarahkan ke desain "The Botanical Gallery"
+- 🪟 **Glassmorphism Layout** — Header transparan + sidebar role-aware dengan ikon Material Symbols
 - 🌿 **Botanical Color System** — Palet warna hijau botani terintegrasi ke variabel Tailwind/ShadCN global
-- 📱 **Mobile Customer UI** — Antarmuka pemesanan pelanggan yang mobile-first dengan Bottom Navigation Bar
+- 📱 **Mobile Customer UI** — Antarmuka pemesanan pelanggan diarahkan ke pengalaman mobile-first
 - 📋 **Waiting List UI** — Halaman antrean digital ditata ulang dengan estetika Botanical
 
 ### v1.5 — Customer Self-Ordering & Waiting List (Maret 2026)
