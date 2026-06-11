@@ -96,45 +96,45 @@
   --color-primary-fixed: #59ee50;
   --color-tertiary: #00666d;
   --color-surface-container-low: #eef2ee;
-  --font-headline: "Plus Jakarta Sans", sans-serif;
-  --font-body: "Be Vietnam Pro", sans-serif;
-  --font-label: "Be Vietnam Pro", sans-serif;
+  --font-headline: var(--font-poppins), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+  --font-label: var(--font-work-sans), sans-serif;
 }
 
 :root {
   --radius: 0.625rem;
-  --background: #f4f7f4; 
-  --foreground: #2b302e; 
-  --card: #ffffff; 
-  --card-foreground: #2b302e; 
-  --popover: #ffffff; 
-  --popover-foreground: #2b302e; 
-  --primary: #006b0a;
-  --primary-foreground: #d2ffc4; 
-  --secondary: #c6e9e9; 
-  --secondary-foreground: #375757;
-  --muted: #eef2ee; 
-  --muted-foreground: #585c5a; 
-  --accent: #59ee50;
-  --accent-foreground: #003e03;
+  --background: #f7f1e6;
+  --foreground: #17231d;
+  --card: #fffaf1;
+  --card-foreground: #17231d;
+  --popover: #fffaf1;
+  --popover-foreground: #17231d;
+  --primary: #0a6b44;
+  --primary-foreground: #fff8e8;
+  --secondary: #f2c94c;
+  --secondary-foreground: #33240a;
+  --muted: #efe6d5;
+  --muted-foreground: #667064;
+  --accent: #d9492f;
+  --accent-foreground: #fff8e8;
   --destructive: #b02500;
   --destructive-foreground: #ffefec;
-  --border: #d9dedb;
-  --input: #dfe4e0;
-  --ring: #59ee50;
-  --chart-1: #006b0a;
-  --chart-2: #59ee50;
-  --chart-3: #19edfd;
-  --chart-4: #416161;
-  --chart-5: #005e65;
-  --sidebar-background: #ffffff;
-  --sidebar-foreground: #2b302e;
-  --sidebar-primary: #006b0a;
-  --sidebar-primary-foreground: #d2ffc4;
-  --sidebar-accent: #eef2ee;
-  --sidebar-accent-foreground: #2b302e;
-  --sidebar-border: #d9dedb;
-  --sidebar-ring: #59ee50;
+  --border: #dfd2bd;
+  --input: #eadfcd;
+  --ring: #b98c48;
+  --chart-1: #0a6b44;
+  --chart-2: #d9492f;
+  --chart-3: #b98c48;
+  --chart-4: #235b67;
+  --chart-5: #8c5f2b;
+  --sidebar-background: #fffaf1;
+  --sidebar-foreground: #17231d;
+  --sidebar-primary: #0a6b44;
+  --sidebar-primary-foreground: #fff8e8;
+  --sidebar-accent: #efe6d5;
+  --sidebar-accent-foreground: #17231d;
+  --sidebar-border: #dfd2bd;
+  --sidebar-ring: #b98c48;
 }
 
 .dark {
@@ -177,6 +177,11 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image:
+      linear-gradient(135deg, rgba(10, 107, 68, 0.035), rgba(217, 73, 47, 0.03)),
+      url("/assets/botanical-pattern.svg");
+    background-size: auto, 620px 620px;
+    background-attachment: fixed;
   }
 }
 
@@ -199,14 +204,49 @@
 }
 
 @layer utilities {
+  .botanical-page {
+    background:
+      radial-gradient(circle at 10% 5%, rgba(242, 201, 76, 0.2), transparent 28rem),
+      radial-gradient(circle at 90% 12%, rgba(10, 107, 68, 0.16), transparent 26rem),
+      linear-gradient(135deg, rgba(255, 250, 241, 0.92), rgba(245, 240, 230, 0.82));
+  }
+  .botanical-panel {
+    background: rgba(255, 250, 241, 0.88);
+    border: 1px solid rgba(185, 140, 72, 0.2);
+    box-shadow: 0 24px 60px rgba(23, 35, 29, 0.08);
+    backdrop-filter: blur(18px);
+  }
+  .botanical-card {
+    background:
+      linear-gradient(180deg, rgba(255, 250, 241, 0.98), rgba(250, 244, 234, 0.94));
+    border: 1px solid rgba(185, 140, 72, 0.18);
+    box-shadow: 0 18px 45px rgba(23, 35, 29, 0.07);
+  }
+  .botanical-card-strong {
+    background:
+      linear-gradient(145deg, rgba(6, 61, 45, 0.98), rgba(10, 107, 68, 0.94));
+    color: #fff8e8;
+    box-shadow: 0 24px 60px rgba(6, 61, 45, 0.24);
+  }
   .botanical-shadow {
-    box-shadow: 0 20px 40px 0 rgba(0, 110, 10, 0.04);
+    box-shadow: 0 22px 48px 0 rgba(10, 107, 68, 0.14);
   }
   .lime-overlay {
-    background: linear-gradient(135deg, rgba(50, 205, 50, 0.2), rgba(0, 110, 10, 0.4));
+    background: linear-gradient(135deg, rgba(242, 201, 76, 0.2), rgba(10, 107, 68, 0.54));
   }
   .primary-glow {
-    background: linear-gradient(135deg, #006e0a, #32cd32);
+    background: linear-gradient(135deg, #063d2d, #0a6b44 55%, #d9492f);
+  }
+  .brass-glow {
+    background: linear-gradient(135deg, #b98c48, #f2c94c);
+  }
+  .chili-glow {
+    background: linear-gradient(135deg, #8f2e20, #d9492f);
+  }
+  .asset-pattern {
+    background-image: url("/assets/botanical-pattern.svg");
+    background-size: 520px 520px;
+    background-position: center;
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none;

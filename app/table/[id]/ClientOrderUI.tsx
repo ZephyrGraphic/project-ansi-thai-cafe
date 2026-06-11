@@ -1,17 +1,44 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { createSelfOrder, getTableActiveOrders } from "@/lib/actions";
 import {
   Minus,
   Plus,
-  ShoppingBag,
-  X,
   CheckCircle2,
   Loader2,
-  Receipt,
   RotateCw,
 } from "lucide-react";
+
+type Category = {
+  id: string;
+  name: string;
+};
+
+type MenuItem = {
+  id: string;
+  name: string;
+  price: number;
+  categoryId: string;
+  description?: string | null;
+  image?: string | null;
+};
+
+type ActiveOrder = {
+  id: string;
+  status: "PENDING" | "PREPARING" | "READY" | "SERVED" | "COMPLETED" | "CANCELLED";
+  totalAmount: number;
+  orderItems: {
+    id: string;
+    qty: number;
+    subtotal: number;
+    notes?: string | null;
+    menu: {
+      name: string;
+    };
+  }[];
+};
 
 export default function ClientOrderUI({
   tableId,
@@ -24,8 +51,8 @@ export default function ClientOrderUI({
   tableId: string;
   tableNo: number;
   tableCapacity: number;
-  categories: any[];
-  menus: any[];
+  categories: Category[];
+  menus: MenuItem[];
   queueId?: string;
 }) {
   const [cart, setCart] = useState<
@@ -42,26 +69,26 @@ export default function ClientOrderUI({
   const [paymentMethod, setPaymentMethod] = useState("tunai");
   
   const [isStatusOpen, setIsStatusOpen] = useState(false);
-  const [activeOrders, setActiveOrders] = useState<any[]>([]);
+  const [activeOrders, setActiveOrders] = useState<ActiveOrder[]>([]);
   const [loadingStatus, setLoadingStatus] = useState(false);
 
-  const fetchStatus = async () => {
+  const fetchStatus = useCallback(async () => {
     setLoadingStatus(true);
     try {
       const orders = await getTableActiveOrders(tableId);
-      setActiveOrders(orders);
+      setActiveOrders(orders as ActiveOrder[]);
     } catch (e) {
       console.error(e);
     } finally {
       setLoadingStatus(false);
     }
-  };
+  }, [tableId]);
 
   useEffect(() => {
     if (isStatusOpen) {
       fetchStatus();
     }
-  }, [isStatusOpen]);
+  }, [fetchStatus, isStatusOpen]);
 
   const addToCart = (menuId: string) => {
     setCart((prev) => {
@@ -218,7 +245,7 @@ export default function ClientOrderUI({
                     </div>
                   </div>
                   <div className="space-y-3 mb-4">
-                    {order.orderItems.map((item: any) => (
+                    {order.orderItems.map((item) => (
                       <div key={item.id} className="flex justify-between text-sm">
                         <div className="flex gap-2">
                           <span className="font-bold text-on-surface-variant">{item.qty}x</span>
@@ -279,7 +306,9 @@ export default function ClientOrderUI({
                 <div key={item.menuId} className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
                   <div className="flex p-4 gap-4">
                     {menu.image ? (
-                       <img src={menu.image} alt={menu.name} className="w-24 h-24 object-cover rounded-lg" />
+                       <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg">
+                         <Image src={menu.image} alt={menu.name} fill sizes="96px" className="object-cover" />
+                       </div>
                     ) : (
                        <div className="w-24 h-24 bg-surface-container rounded-lg flex items-center justify-center text-xs text-outline font-medium">No Img</div>
                     )}
@@ -455,29 +484,35 @@ export default function ClientOrderUI({
   const displayedCategories = activeCategory === "all" ? filteredCategories : filteredCategories.filter(c => c.id === activeCategory);
 
   return (
-    <div className="bg-surface font-body text-on-background min-h-screen selection:bg-primary-container pb-32">
+    <div className="botanical-page min-h-screen pb-32 font-body text-on-background selection:bg-primary-container">
       {/* TopAppBar */}
-      <header className="w-full sticky top-0 z-40 bg-surface-bright flex justify-between items-center px-6 py-4 shadow-[0_4px_30px_rgba(0,0,0,0.03)]">
+      <header className="sticky top-0 z-40 flex w-full items-center justify-between border-b border-[#dfd2bd]/70 bg-[#fffaf1]/90 px-6 py-4 shadow-[0_10px_34px_rgba(23,35,29,0.06)] backdrop-blur-xl">
         <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-primary font-bold">restaurant_menu</span>
-          <h1 className="font-headline font-bold text-xl tracking-tight text-primary">THAI CAFE</h1>
+          <span className="material-symbols-outlined font-bold text-primary">restaurant_menu</span>
+          <h1 className="font-headline text-xl font-black tracking-normal text-primary">THAI CAFE</h1>
         </div>
-        <div className="flex gap-4">
-          <span className="material-symbols-outlined text-primary">search</span>
-          <span className="font-bold text-sm bg-surface-container text-on-surface px-3 py-1 rounded-full">{tableNo}</span>
+        <div className="flex items-center gap-3">
+          <button className="grid size-9 place-items-center rounded-full bg-white/70 text-primary">
+            <span className="material-symbols-outlined text-[20px]">search</span>
+          </button>
+          <span className="rounded-full bg-[#063d2d] px-3 py-1 text-sm font-black text-[#fff8e8]">{tableNo}</span>
         </div>
       </header>
 
       <main className="pb-32">
         {/* Promo Banner / QR Button */}
         <section className="px-6 mt-6">
-          <div className="w-full bg-surface-container-lowest rounded-2xl p-6 flex items-center gap-4 shadow-[0_12px_32px_rgba(0,0,0,0.04)] border border-surface-variant/30">
-            <div className="w-14 h-14 rounded-full bg-primary-container/30 flex items-center justify-center text-primary">
+          <div className="botanical-card relative mx-auto flex w-full max-w-md items-center gap-4 overflow-hidden rounded-[28px] p-5">
+            <div className="absolute -right-8 -top-10 w-44 opacity-20">
+              <Image src="/assets/qr-order-card.svg" alt="" width={720} height={540} />
+            </div>
+            <div className="relative grid size-14 place-items-center rounded-[22px] bg-[#0a6b44]/12 text-primary">
               <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>table_restaurant</span>
             </div>
-            <div>
-              <p className="font-body font-bold text-on-surface-variant text-xs uppercase tracking-widest mb-1">Meja Saat Ini</p>
-              <h2 className="font-headline font-black text-2xl text-on-surface">Meja {tableNo}</h2>
+            <div className="relative">
+              <p className="mb-1 font-body text-xs font-black uppercase tracking-widest text-[#8a7a61]">Meja Saat Ini</p>
+              <h2 className="font-headline text-2xl font-black text-[#063d2d]">Meja {tableNo}</h2>
+              <p className="mt-1 text-xs font-semibold text-[#667064]">Pesan langsung dari meja Anda</p>
             </div>
           </div>
         </section>
@@ -510,11 +545,11 @@ export default function ClientOrderUI({
               {activeCategory === "all" && (
                 <h2 className="font-headline font-bold text-xl text-on-surface mb-2">{category.name}</h2>
               )}
-              {category.menus.map((menu: any) => (
+              {category.menus.map((menu) => (
                 <div key={menu.id} className="flex gap-4 items-center bg-surface-container-lowest p-4 rounded-2xl shadow-[0_8px_24px_rgba(0,0,0,0.02)] border border-outline-variant/10 group active:scale-[0.99] transition-transform">
-                  <div className="w-[100px] h-[100px] rounded-xl overflow-hidden flex-none bg-surface-container">
+                  <div className="relative w-[100px] h-[100px] rounded-xl overflow-hidden flex-none bg-surface-container">
                     {menu.image ? (
-                       <img src={menu.image} alt={menu.name} className="w-full h-full object-cover" />
+                       <Image src={menu.image} alt={menu.name} fill sizes="100px" className="object-cover" />
                     ) : (
                        <div className="w-full h-full flex flex-col items-center justify-center text-outline-variant">
                          <span className="material-symbols-outlined text-3xl">image</span>

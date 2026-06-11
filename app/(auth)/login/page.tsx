@@ -34,84 +34,114 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="flex h-screen w-full bg-surface-bright text-on-surface m-0 p-0 overflow-x-hidden p-0 font-body">
-      {/* Left Side: Visual Anchor */}
-      <section className="relative hidden lg:flex w-1/2 h-full overflow-hidden bg-zinc-900">
-        <Image
-          src="https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80"
-          alt="Gourmet Pad Thai dish"
-          fill
-          className="object-cover absolute inset-0 w-full h-full"
-          priority
-        />
-        <div className="absolute inset-0 lime-overlay mix-blend-multiply"></div>
-        {/* Logo Branding Over Photo */}
-        <div className="absolute inset-0 flex flex-col justify-between p-16 z-10">
-          <div className="flex items-center gap-3">
-            <span className="text-white text-2xl font-extrabold tracking-tighter">THAI CAFE</span>
-          </div>
-          <div className="max-w-md">
-            <h1 className="text-white text-[3.5rem] leading-tight font-extrabold tracking-tight -ml-1">
-              The Botanical Gallery
-            </h1>
-            <p className="text-white/80 mt-4 font-light tracking-wide max-w-sm">
-              Experience the curated essence of Thai culinary arts, where every dish is a botanical masterpiece.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Right Side: Interaction Canvas */}
-      <section className="w-full lg:w-1/2 h-full bg-white flex flex-col items-center justify-center px-8 md:px-24 overflow-y-auto">
-        <div className="w-full max-w-md space-y-10 py-12">
-          {/* Login Header */}
-          <header className="space-y-2">
-            <h2 className="text-on-surface text-[2.5rem] font-extrabold tracking-tight">Selamat Datang</h2>
-            <p className="text-on-surface-variant font-medium tracking-wide">Silakan masuk ke dasbor Anda.</p>
-          </header>
-
-          {/* Demo Accounts - Styled to blend with the new theme */}
-          <div className="bg-surface-container-low border border-surface-variant rounded-xl p-4">
-            <h4 className="text-[0.75rem] font-bold text-primary uppercase tracking-[0.05em] mb-3">
-              Akun Demo
-            </h4>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="bg-white p-2 rounded-lg border border-surface-variant flex flex-col gap-1">
-                <span className="font-bold text-on-surface">Manajer/Admin</span>
-                <span className="text-on-surface-variant">admin / admin123</span>
-              </div>
-              <div className="bg-white p-2 rounded-lg border border-surface-variant flex flex-col gap-1">
-                <span className="font-bold text-on-surface">Kasir</span>
-                <span className="text-on-surface-variant">kasir / kasir123</span>
-              </div>
-              <div className="bg-white p-2 rounded-lg border border-surface-variant flex flex-col gap-1">
-                <span className="font-bold text-on-surface">Pelayan</span>
-                <span className="text-on-surface-variant">waiter / waiter123</span>
-              </div>
-              <div className="bg-white p-2 rounded-lg border border-surface-variant flex flex-col gap-1">
-                <span className="font-bold text-on-surface">Dapur</span>
-                <span className="text-on-surface-variant">kitchen / kitchen123</span>
-              </div>
+    <main className="botanical-page relative min-h-screen w-full overflow-hidden font-body text-on-surface">
+      <div className="absolute inset-0 asset-pattern opacity-[0.08]" />
+      <div className="relative mx-auto grid min-h-screen w-full max-w-7xl grid-cols-1 gap-8 px-5 py-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
+        <section className="hidden min-h-[calc(100vh-3rem)] flex-col justify-between overflow-hidden rounded-[36px] bg-[#063d2d] p-8 text-[#fff8e8] shadow-[0_30px_90px_rgba(6,61,45,0.28)] lg:flex">
+          <div className="flex items-center gap-4">
+            <div className="relative size-14 overflow-hidden rounded-2xl bg-white shadow-xl">
+              <Image src="/assets/thai-cafe-mark.svg" alt="Thai Cafe" fill className="object-cover" priority />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-[#f2c94c]">
+                Botanical Gallery POS
+              </p>
+              <p className="text-xl font-black">Thai Cafe</p>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="relative my-10 flex flex-1 items-center justify-center">
+            <div className="absolute inset-8 rounded-full bg-[#0a6b44]/60 blur-3xl" />
+            <Image
+              src="/assets/menu-plate.svg"
+              alt="Thai Cafe plated menu illustration"
+              width={840}
+              height={620}
+              className="relative w-full max-w-[620px] rounded-[32px] shadow-[0_35px_90px_rgba(0,0,0,0.22)]"
+              priority
+            />
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            {[
+              ["4", "Role staff"],
+              ["QR", "Self-order"],
+              ["Live", "Kitchen flow"],
+            ].map(([value, label]) => (
+              <div key={label} className="rounded-2xl border border-white/12 bg-white/10 p-4 backdrop-blur">
+                <p className="text-2xl font-black text-[#f2c94c]">{value}</p>
+                <p className="mt-1 text-xs font-bold uppercase tracking-widest text-white/66">{label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="flex min-h-[calc(100vh-3rem)] items-center justify-center">
+          <div className="botanical-panel w-full max-w-[520px] rounded-[34px] p-6 md:p-8">
+            <header className="mb-8">
+              <div className="mb-6 flex items-center gap-3 lg:hidden">
+                <div className="relative size-12 overflow-hidden rounded-2xl">
+                  <Image src="/assets/thai-cafe-mark.svg" alt="Thai Cafe" fill className="object-cover" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-[#b98c48]">ANSI POS</p>
+                  <p className="text-lg font-black text-[#063d2d]">Thai Cafe</p>
+                </div>
+              </div>
+              <p className="text-[11px] font-black uppercase tracking-widest text-[#b98c48]">
+                Masuk ke workspace
+              </p>
+              <h2 className="mt-3 text-4xl font-black leading-tight text-[#063d2d]">
+                Operasional cafe dalam satu panel.
+              </h2>
+              <p className="mt-4 text-sm font-medium leading-6 text-[#667064]">
+                Pilih akun demo sesuai role untuk mengelola meja, dapur, pembayaran, dan laporan Thai Cafe.
+              </p>
+            </header>
+
+            <div className="mb-8 rounded-[26px] border border-[#dfd2bd]/70 bg-white/70 p-4">
+              <h4 className="mb-3 text-[0.72rem] font-black uppercase tracking-widest text-[#0a6b44]">
+                Akun Demo
+              </h4>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {[
+                  ["Manajer", "admin", "admin123"],
+                  ["Kasir", "kasir", "kasir123"],
+                  ["Pelayan", "waiter", "waiter123"],
+                  ["Dapur", "kitchen", "kitchen123"],
+                ].map(([role, username, password]) => (
+                  <button
+                    key={role}
+                    type="button"
+                    onClick={() => setFormData({ username, password })}
+                    className="rounded-2xl border border-[#dfd2bd]/70 bg-[#fffaf1] p-3 text-left transition hover:border-[#0a6b44]/40 hover:bg-white"
+                  >
+                    <span className="block text-sm font-black text-[#17231d]">{role}</span>
+                    <span className="mt-1 block text-xs font-semibold text-[#667064]">
+                      {username} / {password}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="bg-error-container border border-error text-on-error-container px-4 py-3 rounded-xl text-sm flex items-center gap-2">
+              <div className="flex items-center gap-2 rounded-2xl border border-[#d9492f]/35 bg-[#d9492f]/12 px-4 py-3 text-sm font-semibold text-[#8f2e20]">
                 <span className="material-symbols-outlined text-lg">error</span>
                 {error}
               </div>
             )}
 
             <div className="space-y-2 group relative">
-              <label htmlFor="username" className="block text-[0.75rem] font-bold uppercase tracking-[0.05em] text-primary mb-2">Username</label>
+              <label htmlFor="username" className="mb-2 block text-[0.72rem] font-black uppercase tracking-widest text-[#0a6b44]">Username</label>
               <div className="relative">
                 <input
                   id="username"
                   value={formData.username}
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                   placeholder="Masukkan username"
-                  className="w-full px-6 py-4 bg-surface-container-low border-2 border-transparent focus:border-primary-container rounded-xl focus:ring-0 focus:outline-none focus:bg-primary/5 transition-all placeholder:text-zinc-400 font-medium pr-12"
+                  className="w-full rounded-2xl border border-[#dfd2bd]/80 bg-white/78 px-5 py-4 pr-12 font-bold text-[#17231d] outline-none transition placeholder:text-[#9c927d] focus:border-[#0a6b44]/45 focus:bg-white focus:ring-4 focus:ring-[#0a6b44]/10"
                   required
                 />
                 <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
@@ -121,7 +151,7 @@ export default function LoginPage() {
             </div>
 
             <div className="space-y-2 group relative">
-              <label htmlFor="password" className="block text-[0.75rem] font-bold uppercase tracking-[0.05em] text-primary mb-2">Password</label>
+              <label htmlFor="password" className="mb-2 block text-[0.72rem] font-black uppercase tracking-widest text-[#0a6b44]">Password</label>
               <div className="relative">
                 <input
                   id="password"
@@ -129,7 +159,7 @@ export default function LoginPage() {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   placeholder="Masukkan password"
-                  className="w-full px-6 py-4 bg-surface-container-low border-2 border-transparent focus:border-primary-container rounded-xl focus:ring-0 focus:outline-none focus:bg-primary/5 transition-all placeholder:text-zinc-400 font-medium pr-12"
+                  className="w-full rounded-2xl border border-[#dfd2bd]/80 bg-white/78 px-5 py-4 pr-12 font-bold text-[#17231d] outline-none transition placeholder:text-[#9c927d] focus:border-[#0a6b44]/45 focus:bg-white focus:ring-4 focus:ring-[#0a6b44]/10"
                   required
                 />
                 <button 
@@ -147,7 +177,7 @@ export default function LoginPage() {
             <button 
               type="submit"
               disabled={isPending}
-              className="w-full primary-glow text-white font-bold py-5 rounded-full botanical-shadow active:scale-[0.98] transition-transform flex items-center justify-center gap-2 mt-4 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="primary-glow mt-6 flex w-full items-center justify-center gap-2 rounded-2xl py-5 font-black uppercase tracking-widest text-white botanical-shadow transition-transform active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isPending ? (
                 <>
@@ -163,32 +193,22 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Simple Info Details */}
-          <div className="pt-2">
-            <div className="bg-surface-container-low p-6 rounded-3xl relative overflow-hidden group">
-              {/* Abstract Botanical Shape in Background */}
-              <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-primary/5 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
-              <div className="relative z-10 flex gap-4 items-start">
-                <div className="w-10 h-10 rounded-full flex-shrink-0 bg-primary-container/20 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-primary text-xl">admin_panel_settings</span>
+            <div className="mt-8 rounded-[24px] bg-[#063d2d]/8 p-5">
+              <div className="flex gap-4">
+                <div className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#0a6b44]/12 text-[#0a6b44]">
+                  <span className="material-symbols-outlined text-xl">admin_panel_settings</span>
                 </div>
                 <div>
-                  <p className="text-[0.7rem] uppercase tracking-[0.1em] text-on-surface-variant font-bold mb-1">Akses Berdasarkan Peran</p>
-                  <p className="text-xs text-on-surface-variant leading-relaxed">
-                    Setiap peran memiliki akses ke menu yang berbeda sesuai tanggung jawabnya.
+                  <p className="mb-1 text-[0.7rem] font-black uppercase tracking-widest text-[#063d2d]">Akses Berdasarkan Peran</p>
+                  <p className="text-xs leading-relaxed text-[#667064]">
+                    Setiap role membawa menu operasionalnya sendiri, dari floor, kitchen, kasir, sampai manager report.
                   </p>
                 </div>
               </div>
             </div>
           </div>
-          
-          <footer className="pt-4 pb-8">
-            <p className="text-center text-[0.7rem] text-zinc-400 font-medium">
-              Sistem Point of Sale untuk pengelolaan restoran Thai Cafe.
-            </p>
-          </footer>
-        </div>
       </section>
+      </div>
     </main>
   );
 }

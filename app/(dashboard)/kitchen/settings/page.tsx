@@ -28,7 +28,7 @@ export default function KitchenSettingsPage() {
             <h3 className="font-bold text-lg text-slate-900 mb-4">Alur Kerja</h3>
             <div className="space-y-4">
                <label className="flex items-center justify-between cursor-pointer">
-                 <span className="text-slate-700">Otomatis pindah ke 'Memasak' saat Diterima</span>
+                 <span className="text-slate-700">Otomatis pindah ke &apos;Memasak&apos; saat Diterima</span>
                  <input type="checkbox" className="toggle" />
                </label>
                <label className="flex items-center justify-between cursor-pointer">

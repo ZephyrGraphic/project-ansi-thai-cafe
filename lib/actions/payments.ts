@@ -1,6 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { demoOrders, demoPayments, getDemoPaymentSummary } from "@/lib/demo-data";
+import { logDemoFallback, shouldUseDemoFallback } from "@/lib/demo-fallback";
 import type { PaymentMethod } from "@prisma/client";
 
 // ============ PROCESS PAYMENT ============
@@ -44,10 +46,24 @@ export async function processPayment(data: {
 }
 
 export async function getPaymentByOrder(orderId: string) {
-  return await prisma.payment.findUnique({
-    where: { orderId },
-    include: { order: true },
-  });
+  try {
+    return await prisma.payment.findUnique({
+      where: { orderId },
+      include: { order: true },
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getPaymentByOrder", error);
+      const payment = demoPayments.find((item) => item.orderId === orderId);
+      if (!payment) return null;
+      return {
+        ...payment,
+        order: demoOrders.find((order) => order.id === orderId) ?? null,
+      };
+    }
+
+    throw error;
+  }
 }
 
 // ============ PAYMENT REPORTS ============
@@ -59,34 +75,60 @@ export async function getDailyPayments(date?: Date) {
   const endOfDay = new Date(targetDate);
   endOfDay.setHours(23, 59, 59, 999);
 
-  return await prisma.payment.findMany({
-    where: {
-      createdAt: {
-        gte: startOfDay,
-        lte: endOfDay,
-      },
-    },
-    include: {
-      order: {
-        include: {
-          table: true,
-          orderItems: { include: { menu: true } },
+  try {
+    return await prisma.payment.findMany({
+      where: {
+        createdAt: {
+          gte: startOfDay,
+          lte: endOfDay,
         },
       },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+      include: {
+        order: {
+          include: {
+            table: true,
+            orderItems: { include: { menu: true } },
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getDailyPayments", error);
+      return demoPayments
+        .filter((payment) => payment.createdAt >= startOfDay && payment.createdAt <= endOfDay)
+        .map((payment) => ({
+          ...payment,
+          order: demoOrders.find((order) => order.id === payment.orderId) ?? demoOrders[0],
+        }))
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    }
+
+    throw error;
+  }
 }
 
 export async function getPaymentSummary(startDate: Date, endDate: Date) {
-  const payments = await prisma.payment.findMany({
-    where: {
-      createdAt: {
-        gte: startDate,
-        lte: endDate,
+  let payments;
+
+  try {
+    payments = await prisma.payment.findMany({
+      where: {
+        createdAt: {
+          gte: startDate,
+          lte: endDate,
+        },
       },
-    },
-  });
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getPaymentSummary", error);
+      return getDemoPaymentSummary();
+    }
+
+    throw error;
+  }
 
   const totalCash = payments
     .filter((p) => p.method === "CASH")

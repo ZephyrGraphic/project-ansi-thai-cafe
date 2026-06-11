@@ -16,10 +16,20 @@ import { useRouter } from "next/navigation";
 
 type QueueStatus = "WAITING" | "CALLED" | "SEATED" | "CANCELLED";
 
+type QueueItem = {
+  id: string;
+  name: string;
+  phone: string;
+  pax: number;
+  status: QueueStatus;
+  notes?: string | null;
+  createdAt: Date;
+};
+
 export default function QueueClient({
   initialQueues,
 }: {
-  initialQueues: any[];
+  initialQueues: QueueItem[];
 }) {
   const router = useRouter();
   const [loadingId, setLoadingId] = useState<string | null>(null);

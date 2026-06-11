@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTransition } from "react";
@@ -109,16 +110,39 @@ export function SidebarContent({ user, onLinkClick }: SidebarContentProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-transparent font-headline text-on-surface">
-      {/* Logo Area */}
-      <div className="p-4 pb-6 flex justify-center shrink-0">
-        <div className="flex items-center justify-center size-10 rounded-2xl bg-primary-container text-on-primary-container shadow-md">
-          <span className="material-symbols-outlined font-black text-[22px]" style={{ fontVariationSettings: "'FILL' 1" }}>grass</span>
+    <div className="flex h-full flex-col bg-transparent p-5 font-headline text-on-surface">
+      <div className="mb-6 rounded-[28px] border border-[#dfd2bd]/80 bg-white/70 p-4 shadow-[0_18px_45px_rgba(23,35,29,0.06)]">
+        <div className="flex items-center gap-3">
+          <div className="relative size-12 overflow-hidden rounded-2xl shadow-md">
+            <Image src="/assets/thai-cafe-mark.svg" alt="Thai Cafe" fill className="object-cover" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#b98c48]">
+              ANSI POS
+            </p>
+            <h1 className="text-lg font-black leading-tight text-[#063d2d]">
+              Thai Cafe
+            </h1>
+          </div>
+        </div>
+        <div className="mt-4 rounded-2xl bg-[#063d2d] px-4 py-3 text-[#fff8e8]">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#f2c94c]">
+            {user ? getModuleLabel(user.role) : "Sistem POS"}
+          </p>
+          <p className="mt-1 truncate text-sm font-bold">
+            {user?.name || user?.username || "Guest"}
+          </p>
+          <p className="text-xs text-white/65">
+            {user ? getRoleLabel(user.role) : "Mode tamu"}
+          </p>
         </div>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 flex flex-col gap-6 overflow-y-auto no-scrollbar items-center py-4">
+      <nav className="flex-1 overflow-y-auto no-scrollbar">
+        <div className="mb-3 px-2 text-[10px] font-black uppercase tracking-widest text-[#8a7a61]">
+          Navigasi
+        </div>
+        <div className="flex flex-col gap-2">
         {navItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(`${item.href}/`));
           
@@ -128,44 +152,62 @@ export function SidebarContent({ user, onLinkClick }: SidebarContentProps) {
               href={item.href}
               onClick={onLinkClick}
               className={cn(
-                "flex flex-col items-center justify-center transition-all duration-300 relative group w-full px-2",
+                "group relative flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition-all duration-200",
                 isActive
-                  ? "text-primary border-r-4 border-primary scale-100 font-black"
-                  : "text-outline hover:text-primary scale-95 active:scale-90"
+                  ? "bg-[#0a6b44] text-[#fff8e8] shadow-[0_16px_36px_rgba(10,107,68,0.2)]"
+                  : "text-[#667064] hover:bg-[#efe6d5]/70 hover:text-[#063d2d]"
               )}
             >
-              <span className={cn("material-symbols-outlined mb-1", isActive ? "text-[26px]" : "text-[24px]")} style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>
+              <span
+                className={cn(
+                  "material-symbols-outlined grid size-9 place-items-center rounded-xl text-[22px]",
+                  isActive ? "bg-white/16 text-[#f2c94c]" : "bg-white/70 text-[#0a6b44]"
+                )}
+                style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}
+              >
                 {item.icon}
               </span>
-              <span className="text-[9px] uppercase tracking-widest text-center leading-tight">
-                {/* Shorten title if needed, maybe just take the first word or break lines */}
-                {item.title.split(' ')[0]}
+              <span className="min-w-0 flex-1 truncate">
+                {item.title}
               </span>
               
-              {/* Optional indicator dot for badges */}
               {item.badge && (
-                <div className="absolute top-0 right-3 size-2 rounded-full bg-error ring-2 ring-surface-container-lowest"></div>
+                <span className="size-2 rounded-full bg-[#d9492f] ring-2 ring-white"></span>
               )}
             </Link>
           );
         })}
+        </div>
       </nav>
 
-      {/* User Profile / Logout */}
-      <div className="mt-auto pt-6 pb-2 px-2 flex flex-col gap-4 items-center shrink-0 border-t border-surface-variant/30 mx-4">
+      <div className="mt-6 border-t border-[#dfd2bd]/70 pt-5">
+        <div className="mb-4 rounded-2xl bg-white/72 p-4">
+          <p className="text-[10px] font-black uppercase tracking-widest text-[#8a7a61]">
+            Shift aktif
+          </p>
+          <div className="mt-2 flex items-center gap-3">
         <button 
           title={user?.name || user?.username || "Guest"}
-          className="flex items-center justify-center size-10 rounded-full bg-surface-container-high border-2 border-surface-variant text-on-surface-variant font-bold text-sm shadow-sm"
+              className="grid size-10 place-items-center rounded-full bg-[#efe6d5] text-sm font-black text-[#063d2d] shadow-sm"
         >
           {user?.name?.charAt(0) || user?.username?.charAt(0) || "?"}
         </button>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-black text-[#17231d]">
+                {user?.username || "guest"}
+              </p>
+              <p className="text-xs text-[#667064]">Siap melayani</p>
+            </div>
+          </div>
+        </div>
         <button 
           onClick={handleLogout}
           disabled={isPending}
           title="Keluar"
-          className="flex items-center justify-center p-2 rounded-xl text-error hover:bg-error-container hover:text-on-error-container transition-colors disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d9492f]/20 bg-[#d9492f]/10 px-4 py-3 text-sm font-black text-[#b02500] transition-colors hover:bg-[#d9492f]/16 disabled:opacity-50"
         >
           <span className="material-symbols-outlined text-[20px]">logout</span>
+          {isPending ? "Keluar..." : "Keluar"}
         </button>
       </div>
     </div>

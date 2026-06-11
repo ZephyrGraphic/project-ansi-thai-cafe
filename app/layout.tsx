@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import type { Metadata } from "next";
 import { Inter, Poppins, Work_Sans } from "next/font/google";
 import "./globals.css";

@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import type { UserRole } from "@prisma/client";
+import { findDemoUser } from "@/lib/demo-data";
+import { logDemoFallback, shouldUseDemoFallback } from "@/lib/demo-fallback";
 
 // Session cookie name
 const SESSION_COOKIE = "thai-cafe-session";
@@ -47,8 +49,38 @@ export async function login(username: string, password: string): Promise<{ succe
 
     return { success: true, user: session };
   } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("login", error);
+      const demoUser = findDemoUser(username, password);
+
+      if (!demoUser) {
+        return { success: false, error: "Username atau password salah" };
+      }
+
+      const session: SessionUser = {
+        id: demoUser.id,
+        username: demoUser.username,
+        name: demoUser.name,
+        role: demoUser.role,
+      };
+
+      const cookieStore = await cookies();
+      cookieStore.set(SESSION_COOKIE, JSON.stringify(session), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+      });
+
+      return { success: true, user: session };
+    }
+
     console.error("Login error:", error);
-    return { success: false, error: "Terjadi kesalahan pada server saat login. Silakan coba lagi." };
+    return {
+      success: false,
+      error: "Database belum bisa dihubungi. Periksa DATABASE_URL/DIRECT_URL di file .env.",
+    };
   }
 }
 

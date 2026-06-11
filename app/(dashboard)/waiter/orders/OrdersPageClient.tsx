@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createOrder } from "@/lib/actions/orders";
 import { updateTableStatus } from "@/lib/actions/tables";
 import type { Menu, Category, Table } from "@prisma/client";
-import { Plus, Minus, Trash2 } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 
 type MenuWithCategory = Menu & { category: Category };
 type TableWithOrders = Table & { orders: unknown[] };
@@ -156,7 +157,7 @@ export default function OrdersPageClient({ menus, categories, tables }: OrdersPa
                 <div key={menu.id} className="group bg-surface-container-lowest rounded-2xl overflow-visible transition-all duration-500 hover:-translate-y-2 border border-surface-variant/30 flex flex-col h-full">
                   <div className="relative h-44 -mt-6 mx-4 shrink-0">
                     {menu.image ? (
-                       <img src={menu.image} alt={menu.name} className="w-full h-full object-cover rounded-2xl shadow-xl shadow-surface-variant/50" />
+                       <Image src={menu.image} alt={menu.name} fill sizes="(min-width: 1024px) 24vw, 40vw" className="rounded-2xl object-cover shadow-xl shadow-surface-variant/50" />
                     ) : (
                        <div className="w-full h-full bg-surface-container rounded-2xl shadow-md flex items-center justify-center text-outline-variant font-bold text-sm">NO IMAGE</div>
                     )}
@@ -208,9 +209,9 @@ export default function OrdersPageClient({ menus, categories, tables }: OrdersPa
                       <div key={item.menuId} className="group">
                         <div className="flex items-start justify-between mb-3">
                            <div className="flex items-center gap-3">
-                              <div className="w-14 h-14 rounded-lg bg-surface-container overflow-hidden shrink-0">
+                              <div className="relative w-14 h-14 rounded-lg bg-surface-container overflow-hidden shrink-0">
                                  {menu?.image ? (
-                                    <img src={menu.image} alt={item.name} className="w-full h-full object-cover" />
+                                    <Image src={menu.image} alt={item.name} fill sizes="56px" className="object-cover" />
                                  ) : (
                                     <div className="w-full h-full flex items-center justify-center bg-surface-container-high text-[10px] font-bold text-outline-variant">IMG</div>
                                  )}

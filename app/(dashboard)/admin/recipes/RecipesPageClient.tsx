@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useTransition, useCallback } from "react";
 import {
   getRecipesByMenu,
   addRecipeIngredient,
@@ -23,7 +22,6 @@ export default function RecipesPageClient({
   categories,
   ingredients,
 }: RecipesPageClientProps) {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [selectedMenuId, setSelectedMenuId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -35,22 +33,20 @@ export default function RecipesPageClient({
     unit: "",
   });
 
+  const loadRecipes = useCallback(async (menuId: string) => {
+    const data = await getRecipesByMenu(menuId);
+    setRecipes(data as RecipeWithIngredient[]);
+  }, []);
+
   // Filter menus by category
   const filteredMenus =
     selectedCategory === "all"
       ? menus
       : menus.filter((m) => m.categoryId === selectedCategory);
 
-  // Load recipes when menu is selected
-  useEffect(() => {
-    if (selectedMenuId) {
-      loadRecipes(selectedMenuId);
-    }
-  }, [selectedMenuId]);
-
-  const loadRecipes = async (menuId: string) => {
-    const data = await getRecipesByMenu(menuId);
-    setRecipes(data as RecipeWithIngredient[]);
+  const handleSelectMenu = (menuId: string) => {
+    setSelectedMenuId(menuId);
+    loadRecipes(menuId);
   };
 
   const handleAddIngredient = async (e: React.FormEvent) => {
@@ -142,7 +138,7 @@ export default function RecipesPageClient({
             {filteredMenus.map((menu) => (
               <button
                 key={menu.id}
-                onClick={() => setSelectedMenuId(menu.id)}
+                onClick={() => handleSelectMenu(menu.id)}
                 className={`w-full text-left px-4 py-3 border-b border-slate-100 hover:bg-slate-50 transition ${
                   selectedMenuId === menu.id ? "bg-green-50 border-l-4 border-l-green-500" : ""
                 }`}

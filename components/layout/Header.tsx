@@ -1,6 +1,6 @@
 "use client"; 
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import type { UserRole } from "@prisma/client";
 import { SidebarContent } from "./SidebarContent";
@@ -16,15 +16,12 @@ interface HeaderProps {
 
 export function Header({ user }: HeaderProps) {
   const pathname = usePathname();
-  const [currentDate, setCurrentDate] = useState<string>("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-    const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
-    const now = new Date();
-    setCurrentDate(`${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]}`);
-  }, []);
+  const currentDate = new Intl.DateTimeFormat("id-ID", {
+    weekday: "long",
+    day: "2-digit",
+    month: "short",
+  }).format(new Date());
 
   const getPageTitle = () => {
      if (pathname.includes("tables")) return "Manajemen Meja";
@@ -40,27 +37,43 @@ export function Header({ user }: HeaderProps) {
 
   return (
     <>
-      <header className="h-20 bg-surface-bright/80 backdrop-blur-md flex items-center justify-between px-6 md:px-10 shrink-0 font-headline z-40 sticky top-0 border-b border-surface-variant/30">
+      <header className="sticky top-0 z-40 flex h-24 shrink-0 items-center justify-between border-b border-[#dfd2bd]/70 bg-[#fffaf1]/82 px-5 font-headline shadow-[0_18px_50px_rgba(23,35,29,0.06)] backdrop-blur-xl md:px-8">
         <div className="flex items-center gap-4">
-          {/* Mobile Menu Toggle */}
           <button 
-            className="md:hidden p-2 -ml-2 text-on-surface hover:bg-surface-container rounded-lg"
+            className="-ml-2 rounded-2xl p-3 text-[#063d2d] hover:bg-[#efe6d5] md:hidden"
             onClick={() => setIsMobileMenuOpen(true)}
           >
             <span className="material-symbols-outlined text-2xl">menu</span>
           </button>
 
-          <div className="flex items-center gap-4 bg-surface-container-low border border-surface-variant rounded-xl px-4 py-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-primary hidden sm:inline">Halaman</span>
-            <h2 className="text-sm font-bold text-on-surface line-clamp-1">{getPageTitle()}</h2>
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#b98c48]">
+              {user?.role || "STAFF"} workspace
+            </p>
+            <h2 className="mt-1 text-2xl font-black leading-tight text-[#063d2d]">
+              {getPageTitle()}
+            </h2>
           </div>
         </div>
-        <div className="flex items-center gap-6">
-          <p className="text-[10px] uppercase font-bold tracking-widest text-outline hidden sm:block">
-            {currentDate || "Loading..."}
-          </p>
-          <div className="flex items-center justify-center p-2 rounded-full cursor-pointer hover:bg-surface-container transition-colors text-on-surface">
-            <span className="material-symbols-outlined text-[20px]">notifications</span>
+        <div className="flex items-center gap-3">
+          <div className="hidden rounded-2xl border border-[#dfd2bd]/80 bg-white/70 px-4 py-3 text-right sm:block">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#8a7a61]">
+              Hari ini
+            </p>
+            <p className="text-sm font-black capitalize text-[#17231d]">
+              {currentDate}
+            </p>
+          </div>
+          <button className="grid size-12 place-items-center rounded-2xl border border-[#dfd2bd]/80 bg-white/70 text-[#063d2d] transition-colors hover:bg-[#efe6d5]">
+            <span className="material-symbols-outlined text-[22px]">notifications</span>
+          </button>
+          <div className="hidden min-w-[150px] rounded-2xl bg-[#063d2d] px-4 py-3 text-[#fff8e8] lg:block">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#f2c94c]">
+              Operator
+            </p>
+            <p className="truncate text-sm font-black">
+              {user?.name || user?.username || "Guest"}
+            </p>
           </div>
         </div>
       </header>
@@ -75,7 +88,7 @@ export function Header({ user }: HeaderProps) {
           ></div>
           
           {/* Drawer */}
-          <div className="relative w-64 h-full bg-white shadow-xl animate-in slide-in-from-left duration-200">
+          <div className="relative h-full w-[282px] bg-[#fffaf1] shadow-xl animate-in slide-in-from-left duration-200">
             <SidebarContent user={user} onLinkClick={() => setIsMobileMenuOpen(false)} />
           </div>
         </div>

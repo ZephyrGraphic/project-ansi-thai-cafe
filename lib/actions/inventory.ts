@@ -1,33 +1,76 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { demoIngredients, demoMenus, demoRecipes } from "@/lib/demo-data";
+import { logDemoFallback, shouldUseDemoFallback } from "@/lib/demo-fallback";
 
 type StockLogType = "IN" | "OUT";
 
 // ============ GET INGREDIENTS ============
 export async function getIngredients() {
-  return await prisma.ingredient.findMany({
-    orderBy: { name: "asc" },
-  });
+  try {
+    return await prisma.ingredient.findMany({
+      orderBy: { name: "asc" },
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getIngredients", error);
+      return [...demoIngredients].sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    throw error;
+  }
 }
 
 export async function getIngredientById(id: string) {
-  return await prisma.ingredient.findUnique({
-    where: { id },
-    include: {
-      recipes: { include: { menu: true } },
-      stockLogs: { orderBy: { createdAt: "desc" }, take: 10 },
-    },
-  });
+  try {
+    return await prisma.ingredient.findUnique({
+      where: { id },
+      include: {
+        recipes: { include: { menu: true } },
+        stockLogs: { orderBy: { createdAt: "desc" }, take: 10 },
+      },
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getIngredientById", error);
+      const ingredient = demoIngredients.find((item) => item.id === id);
+      if (!ingredient) return null;
+
+      return {
+        ...ingredient,
+        recipes: demoRecipes
+          .filter((recipe) => recipe.ingredientId === ingredient.id)
+          .map((recipe) => ({
+            ...recipe,
+            menu: demoMenus.find((menu) => menu.id === recipe.menuId) ?? demoMenus[0],
+          })),
+        stockLogs: [],
+      };
+    }
+
+    throw error;
+  }
 }
 
 export async function getLowStockIngredients() {
-  return await prisma.ingredient.findMany({
-    where: {
-      currentStock: { lte: prisma.ingredient.fields.minStock },
-    },
-    orderBy: { currentStock: "asc" },
-  });
+  try {
+    return await prisma.ingredient.findMany({
+      where: {
+        currentStock: { lte: prisma.ingredient.fields.minStock },
+      },
+      orderBy: { currentStock: "asc" },
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getLowStockIngredients", error);
+      return demoIngredients
+        .filter((ingredient) => ingredient.currentStock <= ingredient.minStock)
+        .sort((a, b) => a.currentStock - b.currentStock);
+    }
+
+    throw error;
+  }
 }
 
 // ============ CREATE/UPDATE INGREDIENTS ============
@@ -88,19 +131,42 @@ export async function addStockLog(data: {
 }
 
 export async function getStockLogs(ingredientId?: string) {
-  return await prisma.stockLog.findMany({
-    where: ingredientId ? { ingredientId } : undefined,
-    include: { ingredient: true },
-    orderBy: { createdAt: "desc" },
-  });
+  try {
+    return await prisma.stockLog.findMany({
+      where: ingredientId ? { ingredientId } : undefined,
+      include: { ingredient: true },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getStockLogs", error);
+      return [];
+    }
+
+    throw error;
+  }
 }
 
 // ============ RECIPES (BOM) ============
 export async function getRecipesByMenu(menuId: string) {
-  return await prisma.recipe.findMany({
-    where: { menuId },
-    include: { ingredient: true },
-  });
+  try {
+    return await prisma.recipe.findMany({
+      where: { menuId },
+      include: { ingredient: true },
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getRecipesByMenu", error);
+      return demoRecipes
+        .filter((recipe) => recipe.menuId === menuId)
+        .map((recipe) => ({
+          ...recipe,
+          ingredient: demoIngredients.find((ingredient) => ingredient.id === recipe.ingredientId) ?? demoIngredients[0],
+        }));
+    }
+
+    throw error;
+  }
 }
 
 export async function addRecipeIngredient(data: {

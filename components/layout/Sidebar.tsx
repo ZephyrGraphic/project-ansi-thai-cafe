@@ -14,7 +14,7 @@ interface SidebarProps {
 
 export function Sidebar({ user }: SidebarProps) {
   return (
-    <aside className="hidden md:flex flex-col py-8 bg-surface-container-lowest border-r border-surface-variant shadow-[20px_0_40px_0_rgba(0,110,10,0.04)] z-50 w-[8%] min-w-[80px]">
+    <aside className="hidden md:flex w-[264px] min-w-[264px] flex-col border-r border-[#dfd2bd]/80 bg-[#fffaf1]/92 shadow-[24px_0_70px_rgba(23,35,29,0.08)] backdrop-blur-xl z-50">
       <SidebarContent user={user} />
     </aside>
   );

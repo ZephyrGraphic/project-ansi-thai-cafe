@@ -1,7 +1,6 @@
 import { getCategories, getMenus, getTableById } from "@/lib/actions";
 import { notFound } from "next/navigation";
 import ClientOrderUI from "./ClientOrderUI";
-import { Coffee } from "lucide-react";
 
 export default async function TableOrderingPage(props: {
   params: Promise<{ id: string }>;

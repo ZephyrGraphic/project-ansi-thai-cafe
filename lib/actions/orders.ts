@@ -1,6 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { demoOrders } from "@/lib/demo-data";
+import { logDemoFallback, shouldUseDemoFallback } from "@/lib/demo-fallback";
 import { deductStockForOrder } from "./inventory";
 
 type OrderStatus =
@@ -17,83 +19,149 @@ export async function getOrders(status?: OrderStatus | OrderStatus[]) {
     ? { status: Array.isArray(status) ? { in: status } : status }
     : undefined;
 
-  return await prisma.order.findMany({
-    where,
-    include: {
-      table: true,
-      user: true,
-      member: true,
-      orderItems: { include: { menu: true } },
-      payment: true,
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  try {
+    return await prisma.order.findMany({
+      where,
+      include: {
+        table: true,
+        user: true,
+        member: true,
+        orderItems: { include: { menu: true } },
+        payment: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getOrders", error);
+      const statuses = status ? (Array.isArray(status) ? status : [status]) : null;
+      return demoOrders
+        .filter((order) => !statuses || statuses.includes(order.status as OrderStatus))
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    }
+
+    throw error;
+  }
 }
 
 export async function getOrderById(id: string) {
-  return await prisma.order.findUnique({
-    where: { id },
-    include: {
-      table: true,
-      user: true,
-      member: true,
-      orderItems: { include: { menu: true } },
-      payment: true,
-    },
-  });
+  try {
+    return await prisma.order.findUnique({
+      where: { id },
+      include: {
+        table: true,
+        user: true,
+        member: true,
+        orderItems: { include: { menu: true } },
+        payment: true,
+      },
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getOrderById", error);
+      return demoOrders.find((order) => order.id === id) ?? null;
+    }
+
+    throw error;
+  }
 }
 
 export async function getActiveOrders() {
-  return await prisma.order.findMany({
-    where: {
-      status: { in: ["PENDING", "PREPARING", "READY"] },
-    },
-    include: {
-      table: true,
-      orderItems: { include: { menu: true } },
-    },
-    orderBy: { createdAt: "asc" },
-  });
+  try {
+    return await prisma.order.findMany({
+      where: {
+        status: { in: ["PENDING", "PREPARING", "READY"] },
+      },
+      include: {
+        table: true,
+        orderItems: { include: { menu: true } },
+      },
+      orderBy: { createdAt: "asc" },
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getActiveOrders", error);
+      return demoOrders
+        .filter((order) => ["PENDING", "PREPARING", "READY"].includes(order.status))
+        .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+    }
+
+    throw error;
+  }
 }
 
 export async function getTableActiveOrders(tableId: string) {
-  return await prisma.order.findMany({
-    where: {
-      tableId,
-      status: { notIn: ["COMPLETED", "CANCELLED"] },
-    },
-    include: {
-      orderItems: { include: { menu: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  try {
+    return await prisma.order.findMany({
+      where: {
+        tableId,
+        status: { notIn: ["COMPLETED", "CANCELLED"] },
+      },
+      include: {
+        orderItems: { include: { menu: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getTableActiveOrders", error);
+      return demoOrders
+        .filter((order) => order.tableId === tableId && !["COMPLETED", "CANCELLED"].includes(order.status))
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    }
+
+    throw error;
+  }
 }
 
 export async function getKitchenOrders() {
-  return await prisma.order.findMany({
-    where: {
-      status: { in: ["PENDING", "PREPARING", "READY"] },
-    },
-    include: {
-      table: true,
-      orderItems: { include: { menu: true } },
-    },
-    orderBy: { createdAt: "asc" },
-  });
+  try {
+    return await prisma.order.findMany({
+      where: {
+        status: { in: ["PENDING", "PREPARING", "READY"] },
+      },
+      include: {
+        table: true,
+        orderItems: { include: { menu: true } },
+      },
+      orderBy: { createdAt: "asc" },
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getKitchenOrders", error);
+      return demoOrders
+        .filter((order) => ["PENDING", "PREPARING", "READY"].includes(order.status))
+        .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+    }
+
+    throw error;
+  }
 }
 
 export async function getCompletedOrders() {
-  return await prisma.order.findMany({
-    where: {
-      status: { in: ["COMPLETED", "SERVED", "CANCELLED"] },
-    },
-    include: {
-      table: true,
-      orderItems: { include: { menu: true } },
-    },
-    orderBy: { createdAt: "desc" },
-    take: 50, // Limit to last 50 orders
-  });
+  try {
+    return await prisma.order.findMany({
+      where: {
+        status: { in: ["COMPLETED", "SERVED", "CANCELLED"] },
+      },
+      include: {
+        table: true,
+        orderItems: { include: { menu: true } },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 50, // Limit to last 50 orders
+    });
+  } catch (error) {
+    if (shouldUseDemoFallback(error)) {
+      logDemoFallback("getCompletedOrders", error);
+      return demoOrders
+        .filter((order) => ["COMPLETED", "SERVED", "CANCELLED"].includes(order.status))
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        .slice(0, 50);
+    }
+
+    throw error;
+  }
 }
 
 // ============ CREATE ORDER ============
